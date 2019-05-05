@@ -28,8 +28,20 @@ class MainWindow(QMainWindow):
             counter = 0
 
         super(MainWindow, self).__init__(*args, **kwargs)
+
+        #Getting screen size, to then load the UI at its center
+        screen = app.primaryScreen()
+        size = screen.size()
+        width = size.width()
+        height = size.height()
+
+        global halfWidth, halfHeight
+        halfWidth = width/2
+        halfHeight = height/2
+
+        
         self.ui = loadUi(".\\resources\\interfaces\\startUp\\startUp.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.Start.pressed.connect(self.startOldFile)
 
@@ -42,10 +54,20 @@ class MainWindow(QMainWindow):
         self.oldFileHeader = ""
         self.newFileHeader = ""
 
+    def getGeometry(self):
+        """Gets location of Window, so when user loads new UI, it stays there."""
+        x = self.frameGeometry().x()
+        y = self.frameGeometry().y()
+        width = self.frameGeometry().width()
+        height = self.frameGeometry().height()
+
+        return int(x), int(y), int(width), int(height)
+
     def startOldFile(self):
         """Loads the UI that asks for user's old file (the one they have the offset for)"""
+        x, y, width, height = self.getGeometry()
         self.ui = loadUi(".\\resources\\interfaces\\oldFile\\oldFile.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(x, y, width, height)
 
         self.here.pressed.connect(self.newWindowNSO)
 
@@ -90,9 +112,10 @@ class MainWindow(QMainWindow):
 
             elif self.noHeader.isChecked():
                 self.newFileHeader = "Doesn't Have *.NSO Header."
-
+                
+            x, y, width, height = self.getGeometry()
             self.ui = loadUi(".\\resources\\interfaces\\newFile\\newFile.ui", self)
-            self.setGeometry(500, 500, 1370, 900)
+            self.setGeometry(x, y, width, height)
 
             self.here.pressed.connect(self.newWindowNSO)
 
@@ -143,8 +166,9 @@ class MainWindow(QMainWindow):
                 except:
                     pass
 
+                x, y, width, height = self.getGeometry()
                 self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
-                self.setGeometry(500, 500, 1370, 900)
+                self.setGeometry(x, y, width, height)
 
                 self.here_2.pressed.connect(self.newWindowOffsetTut)
                 self.Next_2.pressed.connect(self.allDone)
@@ -172,8 +196,9 @@ class MainWindow(QMainWindow):
             except:
                 pass
 
+            x, y, width, height = self.getGeometry()
             self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
-            self.setGeometry(500, 500, 1370, 900)
+            self.setGeometry(x, y, width, height)
 
             self.here_2.pressed.connect(self.newWindowOffsetTut)
             self.Next_2.pressed.connect(self.allDone)
@@ -197,9 +222,10 @@ class MainWindow(QMainWindow):
 
         else:
             os.system("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
-        
+
+            x, y, width, height = self.getGeometry()
             self.ui = loadUi(".\\resources\\interfaces\\allDone\\allDone.ui", self)
-            self.setGeometry(500, 500, 1370, 900)
+            self.setGeometry(x, y, width, height)
 
             self.sameFiles.pressed.connect(self.getOffset)
             self.differentFiles.pressed.connect(self.__init__)
@@ -241,8 +267,9 @@ class decompressNSO(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(decompressNSO, self).__init__(*args, **kwargs)
 
+        global halfWidth, haldHeight
         self.ui = loadUi(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -250,8 +277,9 @@ class offsetTut(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(offsetTut, self).__init__(*args, **kwargs)
 
+        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\offsetInstructions\\offsetInstructions.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -259,8 +287,9 @@ class credits(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(credits, self).__init__(*args, **kwargs)
 
+        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\credits\\credits.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -268,8 +297,9 @@ class convertOffset(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(convertOffset, self).__init__(*args, **kwargs)
 
+        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\convertOffset\\convertOffset.ui", self)
-        self.setGeometry(500, 500, 1370, 900)
+        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
