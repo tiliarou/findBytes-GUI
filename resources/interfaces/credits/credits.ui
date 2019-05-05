@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>789</width>
+    <height>414</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>findBytes GUI</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPlainTextEdit" name="credits">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>22</pointsize>
+       </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="plainText">
+       <string>===Credits===
+
+- Dualie: Programmed the actual offset porter (findBytes)
+
+- AmazingChz: Programmed the GUI (findBytes GUI [this!])
+
+- SciresM: Programmed hactool (what we use to decompress our &quot;main.nso&quot;)
+
+---
+
+Download findBytes by Dualie: https://bit.ly/2Zj48z7
+
+Download findBytes GUI by AmazingChz: &lt;placeholder&gt;
+
+Download hactool by SciresM: https://bit.ly/2NRAs5n
+
+---
+
+Thank you for using the tool. I can't express my gratitude enough; I greatly appreciate it, thanks again.
+
+With love, 
+AmazingChz &lt;3</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

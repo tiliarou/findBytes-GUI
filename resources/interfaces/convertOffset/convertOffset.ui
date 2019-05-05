@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>799</width>
+    <height>498</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>findBytes GUI</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Ink Free</family>
+        <pointsize>24</pointsize>
+        <underline>true</underline>
+       </font>
+      </property>
+      <property name="text">
+       <string>Convert Your New Offset To Other Software/Tools:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>HxD</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===HxD===
+
+Once you get your newly, ported offset; simply **add 0x100 to it**. This can easily be done, by using Windows Calculator and switching to &quot;Programmer&quot; Mode.
+
+For Example:
+
+    findBytes' Newly Ported Offset: 003FD028
+
+    HxD Compatible Offset: 003FD028 + 0x100
+                                         = 003FD128
+
+So, your HxD compatible offset would be &quot;003FD128&quot;.
+
+---
+
+NOTE: This expects you to use the HxD compatible offset, on a &quot;main.uncompressed&quot; file, WITH a *.NSO Header.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>IDA Pro</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit_2">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===IDA Pro===
+
+When you get your newly, ported offset; simply add &quot;71&quot; before it.
+
+For Example:
+
+    findBytes' Newly Ported Offset: 04DFECD4
+
+    IDA Pro Supported Offset: 7104DFECD4
+
+So, your IDA Pro compatible offset, would be &quot;7104DFECD4&quot;.
+
+---
+
+NOTE: This expects you to use the IDA Pro compatible offset, on a &quot;main.nso&quot; file, WITH a *.NSO Header.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>IPS-Witch</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit_3">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===IPS-Witch===
+
+When you get your newly, ported offset; it'll already be compatible with IPS-Witch.
+
+For Example:
+
+    findBytes' Newly Ported Offset: 02C52D41
+
+    IPS-Witch Compatible Offset: 02C52D41
+
+So, your IPS-Witch compatible offset would be &quot;02C52D41&quot;.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>928</width>
+    <height>529</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>findBytes GUI</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Ink Free</family>
+        <pointsize>16</pointsize>
+        <underline>true</underline>
+       </font>
+      </property>
+      <property name="text">
+       <string>Please Follow The Tutorial, For Wherever You Are Getting Your Offset From:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>HxD</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===HxD===
+
+When you find your offset in HxD, simply **subtract 0x100 from the offset.** This can be done using Windows Calculator, by switching to &quot;Programmer&quot; mode.
+
+For Example:
+
+    HxD Offset: 00FDC236
+
+    findBytes GUI Offset:  00FDC236 - 0x100
+                                         = 00FDC136
+
+So, you'd type &quot;00FDC136&quot; into findBytes GUI.
+
+---
+
+NOTE: This expects you to get your HxD offset from a &quot;main.uncompressed&quot; file, WITH a *.NSO Header.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="IDAPro">
+       <attribute name="title">
+        <string>IDA Pro</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit_2">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===IDA Pro===
+
+If you are using IDA Pro, just remove the &quot;71&quot; that comes first in the offset.
+
+For Example:
+
+    IDA Pro Offset: 710DF23653
+
+    findBytes GUI Offset: 0DF23653
+
+So, you'd type &quot;0DF23653&quot; into findBytes GUI.
+
+---
+
+NOTE: This expects you to get your IDA Pro offset from a &quot;main.nso&quot; file, WITH a *.NSO Header.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>IPS-Witch</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEdit_3">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string>===IPS-Witch===
+
+For IPS-Witch, simply keep the offset the same.
+
+For example:
+
+    IPS-Witch Patch/Offset: 
+
+        // Offline Shop [Zewia] (4.3.0)
+        @enabled
+        0138F628 200080D2
+       
+        This means, the offset is &quot;0138F628&quot; for IPS-Witch.
+
+    findBytes GUI Offset: 0138F628
+
+So, you'd type &quot;0138F628&quot; into findBytes GUI.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
