@@ -13,6 +13,7 @@ import time
 from PyQt5 import QtCore 
 from PyQt5.QtCore import Qt, QRect, QRegExp
 from PyQt5.QtWidgets import QWidget, QTextEdit, QPlainTextEdit
+import subprocess
 
 #Need this, in case user picks "find new offset from DIFFERENT files"
 global counter
@@ -25,23 +26,10 @@ class MainWindow(QMainWindow):
         counter += 1
         if counter >= 2:
             self.close()
-            counter = 0
+            counter = 1
 
         super(MainWindow, self).__init__(*args, **kwargs)
-
-        #Getting screen size, to then load the UI at its center
-        screen = app.primaryScreen()
-        size = screen.size()
-        width = size.width()
-        height = size.height()
-
-        global halfWidth, halfHeight
-        halfWidth = width/2
-        halfHeight = height/2
-
-        
         self.ui = loadUi(".\\resources\\interfaces\\startUp\\startUp.ui", self)
-        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.Start.pressed.connect(self.startOldFile)
 
@@ -61,7 +49,9 @@ class MainWindow(QMainWindow):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        return int(x), int(y), int(width), int(height)
+        
+        # We need to do these little adjustments, as the dimensions aren't 100% correct (these adjustments make them 100% correct though)
+        return float(x) + 11, float(y) + 45, float(width) - 23, float(height) - 57
 
     def startOldFile(self):
         """Loads the UI that asks for user's old file (the one they have the offset for)"""
@@ -221,11 +211,23 @@ class MainWindow(QMainWindow):
             self.choice.exec_()
 
         else:
-            os.system("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
+            #Reading output from findBytes.py
+            cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
+            finalOutput = p.stdout.read()
+            retcode = p.wait()
+            finalOutput = str(finalOutput)
+            finalOutput = finalOutput[2:len(finalOutput) - 5]
+            ######
 
             x, y, width, height = self.getGeometry()
             self.ui = loadUi(".\\resources\\interfaces\\allDone\\allDone.ui", self)
             self.setGeometry(x, y, width, height)
+
+            # Setting old offset and new, ported offset...
+            self.oldOffset.setPlainText(str(self.offset.toPlainText()))
+            self.newOffset.setPlainText(str(finalOutput))
+            ######
 
             self.sameFiles.pressed.connect(self.getOffset)
             self.differentFiles.pressed.connect(self.__init__)
@@ -269,7 +271,6 @@ class decompressNSO(QMainWindow):
 
         global halfWidth, haldHeight
         self.ui = loadUi(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui", self)
-        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -279,7 +280,6 @@ class offsetTut(QMainWindow):
 
         global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\offsetInstructions\\offsetInstructions.ui", self)
-        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -289,7 +289,6 @@ class credits(QMainWindow):
 
         global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\credits\\credits.ui", self)
-        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
@@ -299,7 +298,6 @@ class convertOffset(QMainWindow):
 
         global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\convertOffset\\convertOffset.ui", self)
-        self.setGeometry(0, 0, halfWidth, halfHeight)
 
         self.show()
 
