@@ -13,6 +13,11 @@
 
   - Install PyQt5 (run "**pip3 install PyQt5**" in *CMD*, after downloading [Python 3.6.3](https://www.python.org/downloads/release/python-363/))
   
+  - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
+  
+  - Put **findBytes.py** into `.\resources\tools\findBytes\`
+  - Run "**main.py**", and follow its instructions
+  
 ---
 
 ## HOW TO RUN COMPILED VERSION:
@@ -20,9 +25,7 @@
   - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
   - Put **findBytes.py** into `.\folders\findBytes-GUI\resources\tools\findBytes\`
-  - Run "**RUN.exe**", and follow its instructions.
-	
-  - If you encounter any problems, please DM **@AmazingChz#5695** on Discord, or leave an "*Issue*" on GitHub. Thanks!
+  - Run "**RUN.exe**", and follow its instructions
 
 ---
 
@@ -33,3 +36,5 @@
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
   - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NRO*** files)
+
+#### If you encounter any problems, please DM **@AmazingChz#5695** on Discord, or leave an "*Issue*" on GitHub. Thanks!
