@@ -16,6 +16,7 @@
   - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
   - Put **findBytes.py** into `.\resources\tools\findBytes\`
+  
   - Run "**main.py**", and follow its instructions
   
 ---
@@ -25,6 +26,7 @@
   - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
   - Put **findBytes.py** into `.\folders\findBytes-GUI\resources\tools\findBytes\`
+  
   - Run "**RUN.exe**", and follow its instructions
 
 ---
