@@ -41,4 +41,4 @@ Download **AmazingChz's findBytes GUI** tool [here](https://github.com/AmazingCh
 
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
-  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases) (what we use to decompress our "**main.nso**")
+  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our "**main.nso**")
