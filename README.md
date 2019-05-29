@@ -9,26 +9,16 @@
 
 ## HOW TO RUN SOURCE CODE:
 
-  - Download [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python to PATH**". Otherwise, "**pip3**" won't work!)
+  - Download [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python to PATH**" in the installer. Otherwise, "**pip3**" won't work!)
 
   - Install PyQt5 (run "**pip3 install PyQt5**" in *CMD*, after downloading [Python 3.6.3](https://www.python.org/downloads/release/python-363/))
   
   - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
-  - Put **findBytes.py** into `.\resources\tools\findBytes\`
+  - Put [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) into `.\resources\tools\findBytes\`
   
   - Run "**main.py**", and follow its instructions
   
----
-
-## HOW TO RUN COMPILED VERSION:
-	
-  - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
-  
-  - Put **findBytes.py** into `.\folders\findBytes-GUI\resources\tools\findBytes\`
-  
-  - Run "**RUN.exe**", and follow its instructions
-
 ---
 
 ## CREDITS:
@@ -37,6 +27,6 @@
 
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
-  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NRO** files)
+  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NSO** files)
 
 #### If you encounter any problems, please DM **@AmazingChz#5695** on Discord, or leave an "*Issue*" on GitHub. Thanks!
