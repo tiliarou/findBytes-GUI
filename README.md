@@ -27,6 +27,6 @@
 
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
-  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NRO** files)
+  - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NSO** files)
 
 #### If you encounter any problems, please DM **@AmazingChz#5695** on Discord, or leave an "*Issue*" on GitHub. Thanks!
