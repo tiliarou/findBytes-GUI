@@ -7,13 +7,15 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.uic import *
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt, QRect, QRegExp
+from PyQt5.QtWidgets import QWidget, QTextEdit, QPlainTextEdit, QPushButton
+
+import subprocess
 import sys
 import os
 import time
-from PyQt5 import QtCore 
-from PyQt5.QtCore import Qt, QRect, QRegExp
-from PyQt5.QtWidgets import QWidget, QTextEdit, QPlainTextEdit
-import subprocess
+import io
 
 #Need this, in case user picks "find new offset from DIFFERENT files"
 global counter
@@ -162,6 +164,7 @@ class MainWindow(QMainWindow):
 
                 self.here_2.pressed.connect(self.newWindowOffsetTut)
                 self.Next_2.pressed.connect(self.allDone)
+                self.multipleOffsets.pressed.connect(self.getMultOffsets)
 
                 self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
                 self.newFileSet.setText(str(self.newFileDir) + "; " + self.newFileHeader)
@@ -192,11 +195,151 @@ class MainWindow(QMainWindow):
 
             self.here_2.pressed.connect(self.newWindowOffsetTut)
             self.Next_2.pressed.connect(self.allDone)
+            self.multipleOffsets.pressed.connect(self.getMultOffsets)
 
             self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
             self.newFileSet.setText(str(self.newFileDir) + "; " + self.newFileHeader)
 
             self.show()
+
+    def getMultOffsets(self):
+        """Allows user to put as many offsets as they'd like in findBytes GUI"""
+        x, y, width, height = self.getGeometry()
+        self.ui = loadUi(".\\resources\\interfaces\\getMultipleOffsets\\getMultipleOffsets.ui", self)
+        self.setGeometry(x, y, width, height)
+
+        self.howTo.pressed.connect(self.howToMultipleOffsets)
+        self.Next.pressed.connect(self.multOffsetsAllDone)
+
+        self.show()
+
+    def multOffsetsAllDone(self):
+        """Multiple Offsets Parsing"""
+        self.choice = QMessageBox()
+        self.choice.setIcon(QMessageBox.Information)
+        self.choice.setWindowTitle("This may take awhile...")
+        self.choice.setText("It may take a few minutes to port all of your offsets. The time needed depends on how many offsets you are currently porting.\n\nThis program may freeze and stop working. Do not worry, this is normal; just be patient.")
+        self.choice.setStandardButtons(QMessageBox.Ok)
+        self.choice.addButton(QMessageBox.Cancel)
+        self.returnValue = self.choice.exec_()
+
+        if self.returnValue == QMessageBox.Cancel:
+            pass
+        else:
+            self.oldOffsets = []
+            self.patches = []
+            
+            #Writing all offsets that were given from user
+            file = io.open(".\\resources\\offsets\\offsets.txt", "w", encoding="utf-8")
+            text = self.offsets.toPlainText()
+            file.write(text)
+            file.close()
+
+            #Reading the offsets
+            file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+            for lines in file.readlines():
+                try:
+                    tokens = lines.split(" ")
+                    self.oldOffsets.append(tokens[0])
+                except:
+                    continue
+            file.close()
+
+            #Reading the patches
+            file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+            for lines in file.readlines():
+                try:
+                    tokens = lines.split(" ")
+                    self.patches.append(tokens[1])
+                except:
+                    continue
+            file.close()
+
+            #Porting the offsets via findBytes.py
+            self.ported = []
+            for items in range(len(self.oldOffsets)):
+                try:
+                    fixedOffset = self.oldOffsets[items].split("\n")
+                    self.oldOffsets[items] = fixedOffset[0]
+                    
+                    cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
+                    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+                    finalOutput = p.stdout.read()
+                    retcode = p.wait()
+                    finalOutput = str(finalOutput)
+                    finalOutput = finalOutput[2:len(finalOutput) - 5]
+                    self.ported.append(finalOutput)
+                except:
+                    continue
+
+           #Removing "\n", etc. from old patches
+            for items in range(len(self.patches)):
+                try:
+                    fixedOffset = self.patches[items].split("\n")
+                    self.patches[items] = fixedOffset[0]
+                except:
+                    continue
+
+            #Checking if user did not supply patches (at all)
+            if len(self.patches) <= 0:
+                while len(self.patches) != len(self.oldOffsets):
+                    for items in range(len(self.oldOffsets)):
+                        self.patches.insert(0, " ")
+                
+            #Checking if number of offsets = number of patches
+            if len(self.oldOffsets) != len(self.patches):
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Warning)
+                self.choice.setWindowTitle("Found incorrect number count...")
+                self.choice.setText('The number of offsets is not equal to the number of patches. Please make sure the number of offsets and patches are equal, before continuing.\n\nIf you are leaving an extra space between offsets after each line, that can also be a cause for this error. If you have empty lines at the bottom or top of this textbox, that can also be causing this error.\n\nPlease fix these problems before continuing.')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.exec_()
+            else:
+                self.allDoneMultipleOffsets()
+
+    def allDoneMultipleOffsets(self):
+        self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
+        x, y, width, height = self.getGeometry()
+        self.setGeometry(x, y, width, height)
+
+        failed = False
+        
+        #Adding old offsets and patches to screen
+        for items in range(len(self.oldOffsets)):
+            try:
+                self.userOldPatches.insertPlainText(str(self.oldOffsets[items]) + " " + str(self.patches[items]) + "\n")
+            except:
+                continue
+
+        #Adding new offsets and new patches to screen
+        for items in range(len(self.ported)):
+            try:
+                portedOffset = self.ported[items]
+                portedOffset = portedOffset[0:8]
+
+                if str(portedOffset[0]) == "-":
+                    failed = True
+                    self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]) + "\n")
+                else:
+                    confidenceLevel = self.ported[items]
+                    confidenceLevel = confidenceLevel[9:len(confidenceLevel)]
+                
+                    self.userNewPatches.insertPlainText(str(portedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel) + "\n")
+            except:
+                continue
+
+        if failed == True:
+            self.choice = QMessageBox()
+            self.choice.setIcon(QMessageBox.Warning)
+            self.choice.setWindowTitle("Failed to port...")
+            self.choice.setText('One or more of your offsets could not be ported. These offsets have been replaced with "*FAILED*".')
+            self.choice.setStandardButtons(QMessageBox.Ok)
+            self.choice.exec_()
+
+        self.options.pressed.connect(self.userOptions)
+
+        self.show()
+                                             
 
 
     def allDone(self):
@@ -212,12 +355,15 @@ class MainWindow(QMainWindow):
 
         else:
             #Reading output from findBytes.py
-            cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
-            p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
-            finalOutput = p.stdout.read()
-            retcode = p.wait()
-            finalOutput = str(finalOutput)
-            finalOutput = finalOutput[2:len(finalOutput) - 5]
+            try:
+                cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
+                p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
+                finalOutput = p.stdout.read()
+                retcode = p.wait()
+                finalOutput = str(finalOutput)
+                finalOutput = finalOutput[2:len(finalOutput) - 5]
+            except:
+                pass
             ######
 
             x, y, width, height = self.getGeometry()
@@ -225,8 +371,16 @@ class MainWindow(QMainWindow):
             self.setGeometry(x, y, width, height)
 
             # Setting old offset and new, ported offset...
-            self.oldOffset.setPlainText(str(self.offset.toPlainText()))
             self.newOffset.setPlainText(str(finalOutput))
+            self.oldOffset.setPlainText(str(self.offset.toPlainText()))
+
+            if str(finalOutput)[0] == "-":
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Warning)
+                self.choice.setWindowTitle("Failed to port...")
+                self.choice.setText('Your offset could not be ported.')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.exec_()
             ######
 
             self.sameFiles.pressed.connect(self.getOffset)
@@ -249,12 +403,21 @@ class MainWindow(QMainWindow):
         self.window.show()
 
     def creditWin(self):
-        self.window = credits()
+        self.window = credit()
         self.window.show()
 
     def offsetConversions(self):
         self.window = convertOffset()
         self.window.show()
+
+    def howToMultipleOffsets(self):
+        self.window = multOffsetsHelp()
+        self.window.show()
+
+    def userOptions(self):
+        self.window = finalOptions(self)
+        self.window.show()
+        
 
     #############################################
 
@@ -269,7 +432,6 @@ class decompressNSO(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(decompressNSO, self).__init__(*args, **kwargs)
 
-        global halfWidth, haldHeight
         self.ui = loadUi(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui", self)
 
         self.show()
@@ -278,16 +440,14 @@ class offsetTut(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(offsetTut, self).__init__(*args, **kwargs)
 
-        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\offsetInstructions\\offsetInstructions.ui", self)
 
         self.show()
 
-class credits(QMainWindow):
+class credit(QMainWindow):
     def __init__(self, *args, **kwargs):
-        super(credits, self).__init__(*args, **kwargs)
+        super(credit, self).__init__(*args, **kwargs)
 
-        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\credits\\credits.ui", self)
 
         self.show()
@@ -296,10 +456,52 @@ class convertOffset(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(convertOffset, self).__init__(*args, **kwargs)
 
-        global halfWidth, halfHeight
         self.ui = loadUi(".\\resources\\interfaces\\convertOffset\\convertOffset.ui", self)
 
         self.show()
+
+class multOffsetsHelp(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(multOffsetsHelp, self).__init__(*args, **kwargs)
+
+        self.ui = loadUi(".\\resources\\interfaces\\multipleOffsetsInstructions\\multipleOffsetsInstructions.ui", self)
+
+        self.show()
+
+class finalOptions(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(finalOptions, self).__init__(*args, **kwargs)
+
+        self.arguments = args[0]
+
+        self.ui = loadUi(".\\resources\\interfaces\\options\\options.ui", self)
+
+        self.offsetConversions.pressed.connect(self.offsetCon)
+        self.sameFiles.pressed.connect(self.getSameFilesOffset)
+        self.differentFiles.pressed.connect(self.getDifferentFilesOffset)
+        self.quit.pressed.connect(self.quitProgram)
+        self.credits.pressed.connect(self.creditProgram)
+
+        self.show()
+
+    def offsetCon(self):
+        self.window = convertOffset()
+        self.window.show()
+
+    def getSameFilesOffset(self):
+        self.close()
+        self.arguments.getOffset()
+
+    def getDifferentFilesOffset(self):
+        self.close()
+        self.arguments.__init__()
+
+    def quitProgram(self):
+        sys.exit(0)
+
+    def creditProgram(self):
+        self.window = credit()
+        self.window.show()
 
 
 ######################################################################################### 

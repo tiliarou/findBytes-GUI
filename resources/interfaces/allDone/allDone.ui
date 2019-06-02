@@ -333,7 +333,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Port New Offset From SAME Files</string>
+           <string>Port New Offset(s) From SAME Files</string>
           </property>
          </widget>
         </item>
@@ -377,7 +377,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Port New Offset From DIFFERENT Files</string>
+           <string>Port New Offset(s) From DIFFERENT Files</string>
           </property>
          </widget>
         </item>
