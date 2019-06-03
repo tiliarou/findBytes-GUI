@@ -9,7 +9,7 @@
 
 ## How to Run Source Code:
 
-  - Download [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python to PATH**" in the installer. Otherwise, "**pip3**" won't work!)
+  - Download and install [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python to PATH**" in the installer. Otherwise, "**pip3**" won't work!)
 
   - Install PyQt5 (run "**pip3 install PyQt5**" in *CMD*, after downloading [Python 3.6.3](https://www.python.org/downloads/release/python-363/))
   
