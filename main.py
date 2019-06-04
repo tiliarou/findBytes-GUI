@@ -46,14 +46,18 @@ class MainWindow(QMainWindow):
 
     def getGeometry(self):
         """Gets location of Window, so when user loads new UI, it stays there."""
-        x = self.frameGeometry().x()
-        y = self.frameGeometry().y()
-        width = self.frameGeometry().width()
-        height = self.frameGeometry().height()
+        coordinates = str(self.geometry())
+        coordinates = coordinates[19:]
+        coordinates = coordinates[:len(coordinates) - 1]
+       
+        split = coordinates.split(",")
+       
+        x = float(split[0])
+        y = float(split[1])
+        width = float(split[2])
+        height = float(split[3])
 
-        
-        # We need to do these little adjustments, as the dimensions aren't 100% correct (these adjustments make them 100% correct though)
-        return float(x) + 11, float(y) + 45, float(width) - 23, float(height) - 57
+        return float(x), float(y), float(width), float(height)
 
     def startOldFile(self):
         """Loads the UI that asks for user's old file (the one they have the offset for)"""
