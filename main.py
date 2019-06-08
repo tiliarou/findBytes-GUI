@@ -399,21 +399,37 @@ class MainWindow(QMainWindow):
                 file.close()
 
                 #Reading the offsets
+                hexCheckOffset = True
                 file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
                 for lines in file.readlines():
                     try:
                         tokens = lines.split(" ")
                         self.oldOffsets.append(tokens[0])
+
+                        #Making sure patch is a valid hex number...
+                        if tokens[0] != " ":
+                            try:
+                                int(tokens[0], 16)
+                            except:
+                                hexCheckOffset = False
                     except:
                         continue
                 file.close()
 
                 #Reading the patches
+                hexCheckPatch = True
                 file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
                 for lines in file.readlines():
                     try:
                         tokens = lines.split(" ")
                         self.patches.append(tokens[1])
+
+                        #Making sure patch is a valid hex number...
+                        if tokens[1] != " ":
+                            try:
+                                int(tokens[1], 16)
+                            except:
+                                hexCheckPatch = False
                     except:
                         continue
                 file.close()
@@ -455,6 +471,28 @@ class MainWindow(QMainWindow):
                     self.choice.setIcon(QMessageBox.Warning)
                     self.choice.setWindowTitle("Found empty lines...")
                     self.choice.setText('It looks like you have empty lines before, in the middle, or after your offsets. Please remove these unnecessary lines first, before proceeding.')
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.exec_()
+                #Checking if user entered valid offsets/patches...
+                elif hexCheckOffset == False and hexCheckPatch == False:
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Warning)
+                    self.choice.setWindowTitle("Invalid hex digits...")
+                    self.choice.setText('One or more of your offsets and patches are invalid hex numbers. Please make sure you typed your offsets and patches in correctly, then try again.')
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.exec_()
+                elif hexCheckOffset == False:
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Warning)
+                    self.choice.setWindowTitle("Invalid hex digits...")
+                    self.choice.setText('One or more of your offsets is not a valid hex number. Please make sure you typed your offsets in correctly, then try again.')
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.exec_()
+                elif hexCheckPatch == False:
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Warning)
+                    self.choice.setWindowTitle("Invalid hex digits...")
+                    self.choice.setText('One or more of your patches is not a valid hex number. Please make sure you typed your patches in correctly, then try again.')
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 else:
@@ -517,43 +555,59 @@ class MainWindow(QMainWindow):
             self.choice.exec_()
 
         else:
-            #Reading output from findBytes.py
+            #Checking if user entered valid offsets/patches...
+            hexCheck = True
             try:
-                cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
-                p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
-                finalOutput = p.stdout.read()
-                retcode = p.wait()
-                finalOutput = str(finalOutput)
-                finalOutput = finalOutput[2:len(finalOutput) - 5]
+                int(self.offset.toPlainText())
             except:
-                pass
-            ######
-
-            x, y, width, height = self.getGeometry()
-            self.ui = loadUi(".\\resources\\interfaces\\allDone\\allDone.ui", self)
-            self.setGeometry(x, y, width, height)
-
-            # Setting old offset and new, ported offset...
-            self.newOffset.setPlainText(str(finalOutput))
-            self.oldOffset.setPlainText(str(self.offset.toPlainText()))
-
-            if str(finalOutput)[0] == "-":
+                hexCheck = False
+                
+            #Telling user their offset is not a valid hex number (if it isn't)
+            if hexCheck == False:
                 self.choice = QMessageBox()
                 self.choice.setIcon(QMessageBox.Warning)
-                self.choice.setWindowTitle("Failed to port...")
-                self.choice.setText('Your offset could not be ported.')
+                self.choice.setWindowTitle("Invalid hex digits...")
+                self.choice.setText('Your patch is an invalid hex number. Please make sure you typed your offset in correctly, then try again.')
                 self.choice.setStandardButtons(QMessageBox.Ok)
                 self.choice.exec_()
-            ######
+            else:
+                #Reading output from findBytes.py
+                try:
+                    cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
+                    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
+                    finalOutput = p.stdout.read()
+                    retcode = p.wait()
+                    finalOutput = str(finalOutput)
+                    finalOutput = finalOutput[2:len(finalOutput) - 5]
+                except:
+                    pass
+                ######
 
-            self.sameFiles.pressed.connect(self.getOffset)
-            self.differentFiles.pressed.connect(self.__init__)
-            self.quit.pressed.connect(self.quitProgram)
+                x, y, width, height = self.getGeometry()
+                self.ui = loadUi(".\\resources\\interfaces\\allDone\\allDone.ui", self)
+                self.setGeometry(x, y, width, height)
 
-            self.credits.pressed.connect(self.creditWin)
-            self.convertOffset.pressed.connect(self.offsetConversions)
+                # Setting old offset and new, ported offset...
+                self.newOffset.setPlainText(str(finalOutput))
+                self.oldOffset.setPlainText(str(self.offset.toPlainText()))
 
-            self.show()
+                if str(finalOutput)[0] == "-":
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Warning)
+                    self.choice.setWindowTitle("Failed to port...")
+                    self.choice.setText('Your offset could not be ported.')
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.exec_()
+                ######
+
+                self.sameFiles.pressed.connect(self.getOffset)
+                self.differentFiles.pressed.connect(self.__init__)
+                self.quit.pressed.connect(self.quitProgram)
+
+                self.credits.pressed.connect(self.creditWin)
+                self.convertOffset.pressed.connect(self.offsetConversions)
+
+                self.show()
 
     #Functions that create Secondary Windows
 
