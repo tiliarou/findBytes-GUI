@@ -88,9 +88,9 @@ class MainWindow(QMainWindow):
             self.choice.addButton(QMessageBox.No)
             result = self.choice.exec_()
 
-        #Opening latest release for user (if they wish to see)
-        if result == QMessageBox.Yes:
-            os.system(".\\resources\\findBytes-GUI_GitHub.bat")
+            #Opening latest release for user (if they wish to see)
+            if result == QMessageBox.Yes:
+                os.system(".\\resources\\findBytes-GUI_GitHub.bat")
 
     def findBytes(self, process):
         """Makes sure user downloaded findBytes.py"""
@@ -131,6 +131,8 @@ class MainWindow(QMainWindow):
 
                         shutil.rmtree(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", ignore_errors=False, onerror=None)
 
+                        os.system("cls")
+                        
                         #Telling user findBytes.py was downloaded...
                         self.choice = QMessageBox()
                         self.choice.setIcon(QMessageBox.Information)
