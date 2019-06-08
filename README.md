@@ -3,7 +3,7 @@
 
 ---
 
-[findBytes](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) is a tool originally developed by [Dualie](https://github.com/3096), which helps find offsets in different versions of Nintendo Switch games. I then decided to make a nice UI out of it, because who doesn't like UIs?
+[findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) is a tool originally developed by [Dualie](https://github.com/3096), which helps find offsets in different versions of Nintendo Switch games. I then decided to make a nice UI out of it, because who doesn't like UIs?
 
 ---
 
