@@ -17,6 +17,12 @@ import os
 import time
 import io
 
+import urllib.request
+import zipfile
+import shutil
+
+from github import Github
+
 #Need this, in case user picks "find new offset from DIFFERENT files"
 global counter
 counter = 0
@@ -30,6 +36,9 @@ class MainWindow(QMainWindow):
             self.close()
             counter = 1
 
+        #Checking if user has downloaded findBytes.py
+        self.findBytes("full")
+               
         super(MainWindow, self).__init__(*args, **kwargs)
         self.ui = loadUi(".\\resources\\interfaces\\startUp\\startUp.ui", self)
 
@@ -43,6 +52,147 @@ class MainWindow(QMainWindow):
 
         self.oldFileHeader = ""
         self.newFileHeader = ""
+
+        #Checking if there is new version of findBytes GUI
+        self.checkForUpdate()
+
+    def checkForUpdate(self):
+        """Checks for new releases of findBytes GUI"""
+        g = Github()
+
+        g = g.get_repo("AmazingChz/findBytes-GUI")
+
+        releases = g.get_releases()
+
+        #Getting latest release...
+        count = 0
+        for release in releases:
+            count += 1
+            if count == 1:
+                latest = release.title
+
+        #Telling user there is a new release (if there is one)
+        if latest != "I don't like bugs, so I fixed them :>":
+            self.choice = QMessageBox()
+            self.choice.setIcon(QMessageBox.Information)
+            self.choice.setWindowTitle("New release is available...")
+            self.choice.setText('There is a new version of findBytes-GUI available!\n\nWould you like to view the latest release on GitHub?')
+            self.choice.addButton(QMessageBox.Yes)
+            self.choice.addButton(QMessageBox.No)
+            result = self.choice.exec_()
+
+        #Opening latest release for user (if they wish to see)
+        if result == QMessageBox.Yes:
+            os.system(".\\resources\\findBytes-GUI_GitHub.bat")
+
+    def findBytes(self, process):
+        """Makes sure user downloaded findBytes.py"""
+        #Checking if user has downloaded findBytes.py
+        findBytesExist = os.path.isfile(".\\resources\\tools\\findBytes\\findBytes.py")
+
+        if process == "full":
+            if findBytesExist == False:
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Warning)
+                self.choice.setWindowTitle("findBytes.py is missing...")
+                self.choice.setText('It looks like findBytes.py is not downloaded. Download now?\n\nNote: if not downloaded, program will terminate.')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.addButton(QMessageBox.Cancel)
+                result = self.choice.exec_()
+
+                if result == QMessageBox.Ok:
+                    #Putting in try, because who knows what can happen lol
+                    try:
+                        path = urllib.request.urlretrieve("https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80/archive/9b46f05d72d8c292f1fecd67be9b8dfbf1645189.zip", "9b46f05d72d8c292f1fecd67be9b8dfbf1645189.zip")
+
+                        #Unzipping findBytes.py...
+                        zip_ref = zipfile.ZipFile(str(path[0]), 'r')
+                        zip_ref.extractall(".\\resources\\tools\\findBytes\\")
+                        zip_ref.close()
+
+                        #Deleting zip file...
+                        os.system("del " + str(path[0]))
+
+                        #Copying findBytes.py out of folder...
+                        os.system("copy .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py .\\resources\\tools\\findBytes\\")
+
+                        #Deleting old folder...
+                        #1) Deleting contents of folder
+                        #2) Deleting actual folder itself
+                        p = os.popen("del .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", "w")
+                        p.write("Y")
+
+                        shutil.rmtree(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", ignore_errors=False, onerror=None)
+
+                        #Telling user findBytes.py was downloaded...
+                        self.choice = QMessageBox()
+                        self.choice.setIcon(QMessageBox.Information)
+                        self.choice.setWindowTitle("findBytes.py was successfully downloaded...")
+                        self.choice.setText('findBytes.py was successfully downloaded! You may now continue to use this program...')
+                        self.choice.setStandardButtons(QMessageBox.Ok)
+                        self.choice.exec_()
+
+                    except:
+                        #Telling user findBytes.py failed to download...
+                        self.choice = QMessageBox()
+                        self.choice.setIcon(QMessageBox.Critical)
+                        self.choice.setWindowTitle("findBytes.py failed to downloaded...")
+                        self.choice.setText('findBytes.py could not be downloaded. If the problem persists, please contact @AmazingChz#5695 on Discord.\n\nTry again?\n\nNote: if you do not try again, the program will terminate.')
+                        self.choice.addButton(QPushButton("Try Again"), QMessageBox.YesRole)
+                        self.choice.addButton(QMessageBox.Cancel)
+                        result = self.choice.exec_()
+                        if result == 0:
+                            self.findBytes("part")
+                        else:
+                            sys.exit(0)
+                else:
+                    sys.exit(0)
+                    
+        if process == "part":
+            #Putting in try, because who knows what can happen lol
+            try:
+                path = urllib.request.urlretrieve("https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80/archive/9b46f05d72d8c292f1fecd67be9b8dfbf1645189.zip", "9b46f05d72d8c292f1fecd67be9b8dfbf1645189.zip")
+
+                #Unzipping findBytes.py...
+                zip_ref = zipfile.ZipFile(str(path[0]), 'r')
+                zip_ref.extractall(".\\resources\\tools\\findBytes\\")
+                zip_ref.close()
+
+                #Deleting zip file...
+                os.system("del " + str(path[0]))
+
+                #Copying findBytes.py out of folder...
+                os.system("copy .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py .\\resources\\tools\\findBytes\\")
+
+                #Deleting old folder...
+                #1) Deleting contents of folder
+                #2) Deleting actual folder itself
+                p = os.popen("del .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", "w")
+                p.write("Y")
+
+                shutil.rmtree(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", ignore_errors=False, onerror=None)
+
+                #Telling user findBytes.py was downloaded...
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Information)
+                self.choice.setWindowTitle("findBytes.py was successfully downloaded...")
+                self.choice.setText('findBytes.py was successfully downloaded! You may now continue to use this program...')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.exec_()
+
+            except:
+                #Telling user findBytes.py failed to download...
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Critical)
+                self.choice.setWindowTitle("findBytes.py failed to downloaded...")
+                self.choice.setText('findBytes.py could not be downloaded. If the problem persists, please contact @AmazingChz#5695 on Discord.\n\nTry again?\n\nNote: if you do not try again, the program will terminate.')
+                self.choice.addButton(QPushButton("Try Again"), QMessageBox.YesRole)
+                self.choice.addButton(QMessageBox.Cancel)
+                result = self.choice.exec_()
+                if result == 0:
+                    self.findBytes("part")
+                else:
+                    sys.exit(0)
 
     def getGeometry(self):
         """Gets location of Window, so when user loads new UI, it stays there."""
@@ -219,87 +369,96 @@ class MainWindow(QMainWindow):
 
     def multOffsetsAllDone(self):
         """Multiple Offsets Parsing"""
-        self.choice = QMessageBox()
-        self.choice.setIcon(QMessageBox.Information)
-        self.choice.setWindowTitle("This may take awhile...")
-        self.choice.setText("It may take a few minutes to port all of your offsets. The time needed depends on how many offsets you are currently porting.\n\nThis program may freeze and stop working. Do not worry, this is normal; just be patient.")
-        self.choice.setStandardButtons(QMessageBox.Ok)
-        self.choice.addButton(QMessageBox.Cancel)
-        self.returnValue = self.choice.exec_()
-
-        if self.returnValue == QMessageBox.Cancel:
-            pass
+        #Making sure info is filled out...
+        if self.offsets.toPlainText() == "":
+            self.choice = QMessageBox()
+            self.choice.setIcon(QMessageBox.Warning)
+            self.choice.setWindowTitle("Is everything filled out?")
+            self.choice.setText('You are missing required information. Please fulfil these requirements first, before proceeding. When done, click "Next" again.')
+            self.choice.setStandardButtons(QMessageBox.Ok)
+            self.choice.exec_()
         else:
-            self.oldOffsets = []
-            self.patches = []
-            
-            #Writing all offsets that were given from user
-            file = io.open(".\\resources\\offsets\\offsets.txt", "w", encoding="utf-8")
-            text = self.offsets.toPlainText()
-            file.write(text)
-            file.close()
+            self.choice = QMessageBox()
+            self.choice.setIcon(QMessageBox.Information)
+            self.choice.setWindowTitle("This may take awhile...")
+            self.choice.setText("It may take a few minutes to port all of your offsets. The time needed depends on how many offsets you are currently porting.\n\nThis program may freeze and stop working. Do not worry, this is normal; just be patient.")
+            self.choice.setStandardButtons(QMessageBox.Ok)
+            self.choice.addButton(QMessageBox.Cancel)
+            returnValue = self.choice.exec_()
 
-            #Reading the offsets
-            file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
-            for lines in file.readlines():
-                try:
-                    tokens = lines.split(" ")
-                    self.oldOffsets.append(tokens[0])
-                except:
-                    continue
-            file.close()
-
-            #Reading the patches
-            file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
-            for lines in file.readlines():
-                try:
-                    tokens = lines.split(" ")
-                    self.patches.append(tokens[1])
-                except:
-                    continue
-            file.close()
-
-            #Porting the offsets via findBytes.py
-            self.ported = []
-            for items in range(len(self.oldOffsets)):
-                try:
-                    fixedOffset = self.oldOffsets[items].split("\n")
-                    self.oldOffsets[items] = fixedOffset[0]
-                    
-                    cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
-                    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-                    finalOutput = p.stdout.read()
-                    retcode = p.wait()
-                    finalOutput = str(finalOutput)
-                    finalOutput = finalOutput[2:len(finalOutput) - 5]
-                    self.ported.append(finalOutput)
-                except:
-                    continue
-
-           #Removing "\n", etc. from old patches
-            for items in range(len(self.patches)):
-                try:
-                    fixedOffset = self.patches[items].split("\n")
-                    self.patches[items] = fixedOffset[0]
-                except:
-                    continue
-
-            #Checking if user did not supply patches (at all)
-            if len(self.patches) <= 0:
-                while len(self.patches) != len(self.oldOffsets):
-                    for items in range(len(self.oldOffsets)):
-                        self.patches.insert(0, " ")
-                
-            #Checking if number of offsets = number of patches
-            if len(self.oldOffsets) != len(self.patches):
-                self.choice = QMessageBox()
-                self.choice.setIcon(QMessageBox.Warning)
-                self.choice.setWindowTitle("Found incorrect number count...")
-                self.choice.setText('The number of offsets is not equal to the number of patches. Please make sure the number of offsets and patches are equal, before continuing.\n\nIf you are leaving an extra space between offsets after each line, that can also be a cause for this error. If you have empty lines at the bottom or top of this textbox, that can also be causing this error.\n\nPlease fix these problems before continuing.')
-                self.choice.setStandardButtons(QMessageBox.Ok)
-                self.choice.exec_()
+            if returnValue == QMessageBox.Cancel:
+                pass
             else:
-                self.allDoneMultipleOffsets()
+                self.oldOffsets = []
+                self.patches = []
+                
+                #Writing all offsets that were given from user
+                file = io.open(".\\resources\\offsets\\offsets.txt", "w", encoding="utf-8")
+                text = self.offsets.toPlainText()
+                file.write(text)
+                file.close()
+
+                #Reading the offsets
+                file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+                for lines in file.readlines():
+                    try:
+                        tokens = lines.split(" ")
+                        self.oldOffsets.append(tokens[0])
+                    except:
+                        continue
+                file.close()
+
+                #Reading the patches
+                file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+                for lines in file.readlines():
+                    try:
+                        tokens = lines.split(" ")
+                        self.patches.append(tokens[1])
+                    except:
+                        continue
+                file.close()
+
+                #Porting the offsets via findBytes.py
+                self.ported = []
+                for items in range(len(self.oldOffsets)):
+                    try:
+                        fixedOffset = self.oldOffsets[items].split("\n")
+                        self.oldOffsets[items] = fixedOffset[0]
+                        
+                        cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
+                        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+                        finalOutput = p.stdout.read()
+                        retcode = p.wait()
+                        finalOutput = str(finalOutput)
+                        finalOutput = finalOutput[2:len(finalOutput) - 5]
+                        self.ported.append(finalOutput)
+                    except:
+                        continue
+
+               #Removing "\n", etc. from old patches
+                for items in range(len(self.patches)):
+                    try:
+                        fixedOffset = self.patches[items].split("\n")
+                        self.patches[items] = fixedOffset[0]
+                    except:
+                        continue
+
+                #Checking if user did not supply patches (at all)
+                if len(self.patches) <= 0:
+                    while len(self.patches) != len(self.oldOffsets):
+                        for items in range(len(self.oldOffsets)):
+                            self.patches.insert(0, " ")
+                    
+                #Checking if number of offsets = number of patches
+                if len(self.oldOffsets) != len(self.patches):
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Warning)
+                    self.choice.setWindowTitle("Found empty lines...")
+                    self.choice.setText('It looks like you have empty lines before, in the middle, or after your offsets. Please remove these unnecessary lines first, before proceeding.')
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.exec_()
+                else:
+                    self.allDoneMultipleOffsets()
 
     def allDoneMultipleOffsets(self):
         self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
