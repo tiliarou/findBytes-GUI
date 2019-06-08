@@ -144,9 +144,9 @@ class MainWindow(QMainWindow):
                         if result == 0:
                             self.findBytes("part")
                         else:
-                            sys.exit(0)
+                            sys.exit()
                 else:
-                    sys.exit(0)
+                    sys.exit()
                     
         if process == "part":
             #Putting in try, because who knows what can happen lol
@@ -192,7 +192,7 @@ class MainWindow(QMainWindow):
                 if result == 0:
                     self.findBytes("part")
                 else:
-                    sys.exit(0)
+                    sys.exit()
 
     def getGeometry(self):
         """Gets location of Window, so when user loads new UI, it stays there."""
@@ -434,6 +434,9 @@ class MainWindow(QMainWindow):
                         continue
                 file.close()
 
+                #Making sure user has findBytes.py downloaded...
+                self.findBytes("full")
+
                 #Porting the offsets via findBytes.py
                 self.ported = []
                 for items in range(len(self.oldOffsets)):
@@ -545,6 +548,8 @@ class MainWindow(QMainWindow):
 
     def allDone(self):
         """Last UI--returns your new offset via findBytes--"""
+        #Making sure user has findBytes.py downloaded...
+        self.findBytes("full")
         # Makes sure all info is filled out on-screen
         if str(self.offset.toPlainText()) == "":
             self.choice = QMessageBox()
