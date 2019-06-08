@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
         counter += 1
         if counter >= 2:
             self.close()
+            x, y, width, height = self.getGeometry()
             counter = 1
 
         #Checking if user has downloaded findBytes.py
@@ -41,6 +42,12 @@ class MainWindow(QMainWindow):
                
         super(MainWindow, self).__init__(*args, **kwargs)
         self.ui = loadUi(".\\resources\\interfaces\\startUp\\startUp.ui", self)
+
+        #Putting in try, as normally, start up UI doesn't get coordinates (only if user goes back "<- Home")
+        try:
+            self.setGeometry(x, y, width, height)
+        except:
+            pass
 
         self.Start.pressed.connect(self.startOldFile)
 
@@ -215,10 +222,9 @@ class MainWindow(QMainWindow):
         self.ui = loadUi(".\\resources\\interfaces\\oldFile\\oldFile.ui", self)
         self.setGeometry(x, y, width, height)
 
+        self.home.pressed.connect(self.__init__)
         self.here.pressed.connect(self.newWindowNSO)
-
         self.newFile.pressed.connect(self.selectOldFile)
-
         self.Next.pressed.connect(self.startNewFile)
 
 
@@ -234,39 +240,52 @@ class MainWindow(QMainWindow):
 
     def startNewFile(self):
         """Loads the UI that asks for the new file (the one they want to port their patch to)"""
+        #Putting in try, as user has option to come back to this screen if they want. Without try, this would cause an error
         # Makes sure all info is filled out on-screen
-        checkHeader = self.header.isChecked()
-        checkNoHeader = self.noHeader.isChecked()
-        if str(self.plainTextEdit.toPlainText()) == "" or checkHeader == False and checkNoHeader == False:
-            self.choice = QMessageBox()
-            self.choice.setIcon(QMessageBox.Warning)
-            self.choice.setWindowTitle("Is everything filled out?")
-            self.choice.setText('You are missing required information. Please fulfil these requirements first, before proceeding. When done, click "Next" again.')
-            self.choice.setStandardButtons(QMessageBox.Ok)
-            self.choice.exec_()
+        try:
+            checkHeader = self.header.isChecked()
+            checkNoHeader = self.noHeader.isChecked()
+            if str(self.plainTextEdit.toPlainText()) == "" or checkHeader == False and checkNoHeader == False:
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Warning)
+                self.choice.setWindowTitle("Is everything filled out?")
+                self.choice.setText('You are missing required information. Please fulfil these requirements first, before proceeding. When done, click "Next" again.')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.exec_()
 
-        else:
-            #Checking which radio button was clicked [old file]
-            if self.header.isChecked():
-                self.oldFileHeader = "Has *.NSO Header."
+            else:
+                #Checking which radio button was clicked [old file]
+                if self.header.isChecked():
+                    self.oldFileHeader = "Has *.NSO Header."
 
-                self.oldRemoveHeader = ".\\resources\\temp\\" + str(self.oldFileName)
+                    self.oldRemoveHeader = ".\\resources\\temp\\" + str(self.oldFileName)
 
-                with open(self.oldFileDir, 'rb') as in_file:
-                    with open(self.oldRemoveHeader, 'wb') as out_file:
-                        out_file.write(in_file.read()[100:])
+                    with open(self.oldFileDir, 'rb') as in_file:
+                        with open(self.oldRemoveHeader, 'wb') as out_file:
+                            out_file.write(in_file.read()[100:])
 
-            elif self.noHeader.isChecked():
-                self.newFileHeader = "Doesn't Have *.NSO Header."
-                
+                elif self.noHeader.isChecked():
+                    self.newFileHeader = "Doesn't Have *.NSO Header."
+                    
+                x, y, width, height = self.getGeometry()
+                self.ui = loadUi(".\\resources\\interfaces\\newFile\\newFile.ui", self)
+                self.setGeometry(x, y, width, height)
+
+                self.back.pressed.connect(self.startOldFile)
+                self.here.pressed.connect(self.newWindowNSO)
+                self.newFile.pressed.connect(self.selectNewFile)
+                self.Next.pressed.connect(self.getOffset)
+
+
+                self.show()
+        except:
             x, y, width, height = self.getGeometry()
             self.ui = loadUi(".\\resources\\interfaces\\newFile\\newFile.ui", self)
             self.setGeometry(x, y, width, height)
 
+            self.back.pressed.connect(self.startOldFile)
             self.here.pressed.connect(self.newWindowNSO)
-
             self.newFile.pressed.connect(self.selectNewFile)
-
             self.Next.pressed.connect(self.getOffset)
 
 
@@ -316,8 +335,9 @@ class MainWindow(QMainWindow):
                 self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
                 self.setGeometry(x, y, width, height)
 
-                self.here_2.pressed.connect(self.newWindowOffsetTut)
-                self.Next_2.pressed.connect(self.allDone)
+                self.back.pressed.connect(self.startNewFile)
+                self.here.pressed.connect(self.newWindowOffsetTut)
+                self.Next.pressed.connect(self.allDone)
                 self.multipleOffsets.pressed.connect(self.getMultOffsets)
 
                 self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
@@ -347,8 +367,9 @@ class MainWindow(QMainWindow):
             self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
             self.setGeometry(x, y, width, height)
 
-            self.here_2.pressed.connect(self.newWindowOffsetTut)
-            self.Next_2.pressed.connect(self.allDone)
+            self.back.pressed.connect(self.startNewFile)
+            self.here.pressed.connect(self.newWindowOffsetTut)
+            self.Next.pressed.connect(self.allDone)
             self.multipleOffsets.pressed.connect(self.getMultOffsets)
 
             self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
@@ -362,6 +383,7 @@ class MainWindow(QMainWindow):
         self.ui = loadUi(".\\resources\\interfaces\\getMultipleOffsets\\getMultipleOffsets.ui", self)
         self.setGeometry(x, y, width, height)
 
+        self.back.pressed.connect(self.getOffset)
         self.howTo.pressed.connect(self.howToMultipleOffsets)
         self.Next.pressed.connect(self.multOffsetsAllDone)
 
@@ -502,8 +524,8 @@ class MainWindow(QMainWindow):
                     self.allDoneMultipleOffsets()
 
     def allDoneMultipleOffsets(self):
-        self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
         x, y, width, height = self.getGeometry()
+        self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
         self.setGeometry(x, y, width, height)
 
         failed = False
@@ -606,7 +628,7 @@ class MainWindow(QMainWindow):
                 ######
 
                 self.sameFiles.pressed.connect(self.getOffset)
-                self.differentFiles.pressed.connect(self.__init__)
+                self.differentFiles.pressed.connect(self.startOldFile)
                 self.quit.pressed.connect(self.quitProgram)
 
                 self.credits.pressed.connect(self.creditWin)
@@ -716,7 +738,7 @@ class finalOptions(QMainWindow):
 
     def getDifferentFilesOffset(self):
         self.close()
-        self.arguments.__init__()
+        self.arguments.startOldFile()
 
     def quitProgram(self):
         sys.exit(0)

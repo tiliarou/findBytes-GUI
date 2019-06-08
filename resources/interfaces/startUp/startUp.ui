@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
+    <width>714</width>
     <height>401</height>
    </rect>
   </property>
@@ -15,47 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="leftMargin">
-       <number>10</number>
-      </property>
-      <property name="rightMargin">
-       <number>10</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="title">
-        <property name="font">
-         <font>
-          <family>Ink Free</family>
-          <pointsize>60</pointsize>
-          <underline>true</underline>
-         </font>
-        </property>
-        <property name="text">
-         <string>Welcome to findBytes GUI</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="AmazingChz">
-        <property name="font">
-         <font>
-          <family>Ink Free</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>by AmazingChz</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>10</number>
@@ -66,40 +26,18 @@
       <property name="verticalSpacing">
        <number>30</number>
       </property>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="Start">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+      <item row="3" column="0" colspan="3">
+       <widget class="QLabel" name="logo">
         <property name="font">
          <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
+          <family>Ink Free</family>
+          <pointsize>18</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Start...</string>
+         <string>Port your patches, update your offsets.</string>
         </property>
        </widget>
-      </item>
-      <item row="1" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>270</width>
-          <height>30</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item row="1" column="2">
        <spacer name="horizontalSpacer_2">
@@ -117,18 +55,21 @@
         </property>
        </spacer>
       </item>
-      <item row="3" column="0" colspan="3">
-       <widget class="QLabel" name="logo">
-        <property name="font">
-         <font>
-          <family>Ink Free</family>
-          <pointsize>18</pointsize>
-         </font>
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="text">
-         <string>Port your patches, update your offsets.</string>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>270</width>
+          <height>30</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="2" column="0">
        <spacer name="verticalSpacer">
@@ -158,6 +99,85 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="Start">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Start...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>MS Shell Dlg 2</family>
+          <pointsize>12</pointsize>
+          <underline>false</underline>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 85, 0);</string>
+        </property>
+        <property name="text">
+         <string>Version: 5.5</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="title">
+        <property name="font">
+         <font>
+          <family>Ink Free</family>
+          <pointsize>60</pointsize>
+          <underline>true</underline>
+         </font>
+        </property>
+        <property name="text">
+         <string>Welcome to findBytes GUI</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="AmazingChz">
+        <property name="font">
+         <font>
+          <family>Ink Free</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>by AmazingChz</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
