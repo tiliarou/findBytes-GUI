@@ -558,7 +558,7 @@ class MainWindow(QMainWindow):
             #Checking if user entered valid offsets/patches...
             hexCheck = True
             try:
-                int(self.offset.toPlainText())
+                int(self.offset.toPlainText(), 16)
             except:
                 hexCheck = False
                 
