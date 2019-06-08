@@ -11,7 +11,7 @@
 
   - Download and install [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python to PATH**" in the installer. Otherwise, "**pip3**" won't work!)
 
-  - Install PyQt5 (run "**pip3 install PyQt5**" in *CMD*, after downloading [Python 3.6.3](https://www.python.org/downloads/release/python-363/))
+  - Install PyQt5 and PyGithub (run "**pip3 install PyQt5 PyGithub**" in *CMD*, after downloading [Python 3.6.3](https://www.python.org/downloads/release/python-363/))
   
   - Download [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
