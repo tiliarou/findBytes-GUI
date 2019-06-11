@@ -387,11 +387,11 @@ class MainWindow(QMainWindow):
 
         self.back.pressed.connect(self.getOffset)
         self.howTo.pressed.connect(self.howToMultipleOffsets)
-        self.Next.pressed.connect(self.multOffsetsAllDone)
+        self.Next.pressed.connect(self.multOffsetsParsing)
 
         self.show()
 
-    def multOffsetsAllDone(self):
+    def multOffsetsParsing(self):
         """Multiple Offsets Parsing"""
         #Making sure info is filled out...
         if self.offsets.toPlainText() == "":
@@ -446,12 +446,20 @@ class MainWindow(QMainWindow):
                 for lines in file.readlines():
                     try:
                         tokens = lines.split(" ")
-                        self.patches.append(tokens[1])
-
-                        #Making sure patch is a valid hex number...
-                        if tokens[1] != " ":
+                        #Adding all patches to self.patches...
+                        global patch
+                        patch = ""
+                        for items in range(len(tokens)):
                             try:
-                                int(tokens[1], 16)
+                                patch += " " + str(tokens[items + 1])
+                            except:
+                                continue
+                        self.patches.append(patch)
+
+                        #Making sure patch is a valid patch...
+                        if patch != " ":
+                            try:
+                                str(patch)
                             except:
                                 hexCheckPatch = False
                     except:
@@ -504,28 +512,29 @@ class MainWindow(QMainWindow):
                 elif hexCheckOffset == False and hexCheckPatch == False:
                     self.choice = QMessageBox()
                     self.choice.setIcon(QMessageBox.Warning)
-                    self.choice.setWindowTitle("Invalid hex digits...")
-                    self.choice.setText('One or more of your offsets and patches are invalid hex numbers. Please make sure you typed your offsets and patches in correctly, then try again.')
+                    self.choice.setWindowTitle("Invalid hex digits and patches...")
+                    self.choice.setText('One or more of your offsets and patches are not invalid.\n\nPlease make sure you typed your offsets and patches in correctly, then try again.')
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 elif hexCheckOffset == False:
                     self.choice = QMessageBox()
                     self.choice.setIcon(QMessageBox.Warning)
                     self.choice.setWindowTitle("Invalid hex digits...")
-                    self.choice.setText('One or more of your offsets is not a valid hex number. Please make sure you typed your offsets in correctly, then try again.')
+                    self.choice.setText('One or more of your offsets is not valid.\n\nPlease make sure you typed your offsets in correctly, then try again.')
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 elif hexCheckPatch == False:
                     self.choice = QMessageBox()
                     self.choice.setIcon(QMessageBox.Warning)
-                    self.choice.setWindowTitle("Invalid hex digits...")
-                    self.choice.setText('One or more of your patches is not a valid hex number. Please make sure you typed your patches in correctly, then try again.')
+                    self.choice.setWindowTitle("Invalid patches...")
+                    self.choice.setText('One or more of your patches is not valid.\n\nPlease make sure you typed your patches in correctly, then try again.')
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 else:
                     self.allDoneMultipleOffsets()
 
     def allDoneMultipleOffsets(self):
+        """Final UI for those who are porting multiple offsets/patches"""
         x, y, width, height = self.getGeometry()
         self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
         self.setGeometry(x, y, width, height)
