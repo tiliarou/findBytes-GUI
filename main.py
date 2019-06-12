@@ -1,7 +1,60 @@
 """ This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
 stuff too that I can't think of currently ¯\_(ツ)_/¯ . Besides all of that though, I hope you find the tool useful. Cheers """
 
-import PyQt5
+import sys
+import time
+
+try:
+    import PyQt5
+except:
+    download = input("\nPyQt5 is not installed! Install now? (Y\\N) ")
+    if download == "Y" or download == "y":
+        #Python is weird; some python versions have pip one way; others have it a different...
+        try:
+            from pip._internal import main
+            main(["install", "PyQt5"])
+            del main
+        except:
+            import pip
+            pip.main(["install", "PyQt5"])
+            del pip
+        
+        import PyQt5
+    elif download == "N" or download == "n":
+        print("\n===Installation Aborted===\nProgram will now terminate...")
+        time.sleep(3)
+        sys.exit()
+    else:
+        print('\n"{0}" is an unknown option. Please only type "Y" or "N".\nProgram will now terminate...'.format(download))    
+        time.sleep(3.5)
+        sys.exit()
+
+try:
+    from github import Githubs
+except:
+    time.sleep(1)
+    download = input("\nPyGithub is not installed! Install now? (Y\\N) ")
+    if download == "Y" or download == "y":
+        #Python is weird; some python versions have pip one way; others have it a different...
+        try:
+            from pip._internal import main
+            main(["install", "PyGithub"])
+            del main
+        except:
+            import pip
+            pip.main(["install", "PyGithub"])
+            del pip
+        
+        from github import Github
+    elif download == "N" or download == "n":
+        print("\n===Installation Aborted===\nProgram will now terminate...")
+        time.sleep(3)
+        sys.exit()
+    else:
+        print('\n"{0}" is an unknown option. Please only type "Y" or "N".\nProgram will now terminate...'.format(download))    
+        time.sleep(3.5)
+        sys.exit()
+
 from PyQt5 import QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -12,16 +65,12 @@ from PyQt5.QtCore import Qt, QRect, QRegExp
 from PyQt5.QtWidgets import QWidget, QTextEdit, QPlainTextEdit, QPushButton
 
 import subprocess
-import sys
-import os
-import time
 import io
+import os
 
 import urllib.request
 import zipfile
 import shutil
-
-from github import Github
 
 #Need this, in case user picks "find new offset from DIFFERENT files"
 global counter
