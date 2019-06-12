@@ -1,4 +1,4 @@
-""" This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
+﻿""" This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
 stuff too that I can't think of currently ¯\_(ツ)_/¯ . Besides all of that though, I hope you find the tool useful. Cheers """
 
 import sys
@@ -30,7 +30,7 @@ except:
         sys.exit()
 
 try:
-    from github import Githubs
+    from github import Github
 except:
     time.sleep(1)
     download = input("\nPyGithub is not installed! Install now? (Y\\N) ")
