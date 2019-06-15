@@ -849,6 +849,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 if __name__ == '__main__':
+    print("Loading findBytes GUI. Please stand-by...")
     #Hiding console :P
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
