@@ -7,6 +7,16 @@
 
 ---
 
+# *Features:*
+ - Port full [IPS-Witch](https://github.com/3096/ipswitch/releases) patches.
+ - Port multiple offsets at a time.
+ - Continuously port offsets from *same* or *different* files.
+ - Decompress your ***.NSO** file(s) via "**decompressNSO.bat**".
+ - Clean, easy to understand UI.
+ 
+
+---
+
 ## How to Run Source Code:
 
   - Download and install [Python 3.6.3](https://www.python.org/downloads/release/python-363/) (make sure to check "**Add Python 3.6 to PATH**" in the installer. Otherwise, "**pip3**" won't work!)
