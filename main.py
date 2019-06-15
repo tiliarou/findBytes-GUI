@@ -64,6 +64,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QRect, QRegExp
 from PyQt5.QtWidgets import QWidget, QTextEdit, QPlainTextEdit, QPushButton
 
+import ctypes
 import subprocess
 import io
 import os
@@ -848,10 +849,14 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 if __name__ == '__main__':
+    #Hiding console :P
+    whnd = ctypes.windll.kernel32.GetConsoleWindow()
+    if whnd != 0:
+        ctypes.windll.user32.ShowWindow(whnd, 0)
+        
     #Checking if user wants to decompress *.NSO
     if len(sys.argv) == 2:
         os.system(resource_path(".\\resources\\tools\\hactool\\hactool") + " -t nso {0} --uncompressed={0}.uncompressed".format(sys.argv[1]))
-        print("hactool -t nso {0} --uncompressed={0}.uncompressed".format(sys.argv[1]))
         sys.exit()
     else:
         #Running normal findBytes GUI
