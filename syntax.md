@@ -38,10 +38,11 @@ etc...
 1. Don't leave extra lines before, after, or between, offsets/patches!
 	
 ex.
-   00317291
 
-   01038103
-   0A171937
+    00317291
+
+    01038103
+    0A171937
 
 2. Remove any spaces before, after, or in the the middle, of your offsets/patches.
 
