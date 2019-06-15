@@ -28,7 +28,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Please Follow The Tutorial, For Wherever You Are Getting Your Offset(s) From:</string>
+       <string>Please Follow The Tutorial, For Wherever You Are Getting Your Offset(s)/Patch(es) From:</string>
       </property>
      </widget>
     </item>
@@ -37,6 +37,101 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>SYNTAX HELP</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="syntax">
+            <property name="font">
+             <font>
+              <pointsize>22</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
+            <property name="text">
+             <string>Syntax Tutorial</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <family>Ink Free</family>
+              <pointsize>36</pointsize>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="text">
+             <string>Need help on the syntax of findBytes GUI?</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>HxD</string>
@@ -71,7 +166,7 @@ So, you'd type &quot;00FDC136&quot; into findBytes GUI.
 
 NOTE: This expects you to get your HxD offset from a &quot;main.uncompressed&quot; file, WITH a *.NSO Header.
 
-Keep in mind, you can do this for as many offsets as you want!</string>
+Keep in mind, you can do this for as many offsets as you want! Just separate each new offset with a new line.</string>
           </property>
          </widget>
         </item>
@@ -110,7 +205,7 @@ So, you'd type &quot;0DF23653&quot; into findBytes GUI.
 
 NOTE: This expects you to get your IDA Pro offset from a &quot;main.nso&quot; file, WITH a *.NSO Header.
 
-Keep in mind, you can do this for as many offsets as you want!</string>
+Keep in mind, you can do this for as many offsets as you want! Just separate each new offset with a new line.</string>
           </property>
          </widget>
         </item>
@@ -152,7 +247,7 @@ For example:
 So, you'd type &quot;0138F628&quot; into findBytes GUI.
 (If you wish to port your offsets with your patches, you can do &quot;0138F628 200080D2&quot; in findBytes GUI too!)
 
-Keep in mind, you can do this for as many offsets as you want!</string>
+Keep in mind, you can do this for as many offsets/patches as you want! Just separate each new offset/patch with a new line.</string>
           </property>
          </widget>
         </item>

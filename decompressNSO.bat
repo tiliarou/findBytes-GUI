@@ -14,8 +14,7 @@ Goto:decompress
 rem -------------------------
 
 :decompress
-cd ./resources/tools/hactool/
-hactool -t nso %1 --uncompressed=%1.uncompressed
+main.py %1
 
 Exit /b
 

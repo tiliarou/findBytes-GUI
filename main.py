@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
         self.findBytes("full")
                
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.ui = loadUi(".\\resources\\interfaces\\startUp\\startUp.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\startUp\\startUp.ui"), self)
 
         #Putting in try, as normally, start up UI doesn't get coordinates (only if user goes back "<- Home")
         try:
@@ -99,18 +99,33 @@ class MainWindow(QMainWindow):
             pass
 
         self.Start.pressed.connect(self.startOldFile)
+        self.githubBtn.pressed.connect(self.githubPage)
 
         self.show()
 
         #Declaring variables, to prevent future possible errors, later on.
-        self.oldFileDir = ""
-        self.newFileDir = ""
+        global oldFileDir, newFileDir, oldFileHeader, newFileHeader
+        oldFileDir = ""
+        newFileDir = ""
 
-        self.oldFileHeader = ""
-        self.newFileHeader = ""
+        oldFileHeader = ""
+        newFileHeader = ""
 
         #Checking if there is new version of findBytes GUI
         self.checkForUpdate()
+
+    def githubPage(self):
+        os.system(self.resource_path(".\\resources\\findBytes-GUI_GitHub.bat"))
+        
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
     def checkForUpdate(self):
         """Checks for new releases of findBytes GUI"""
@@ -139,12 +154,12 @@ class MainWindow(QMainWindow):
 
             #Opening latest release for user (if they wish to see)
             if result == QMessageBox.Yes:
-                os.system(".\\resources\\findBytes-GUI_GitHub.bat")
+                os.system(self.resource_path(".\\resources\\findBytes-GUI_GitHub.bat"))
 
     def findBytes(self, process):
         """Makes sure user downloaded findBytes.py"""
         #Checking if user has downloaded findBytes.py
-        findBytesExist = os.path.isfile(".\\resources\\tools\\findBytes\\findBytes.py")
+        findBytesExist = os.path.isfile(self.resource_path(".\\resources\\tools\\findBytes\\findBytes.py"))
 
         if process == "full":
             if findBytesExist == False:
@@ -163,22 +178,23 @@ class MainWindow(QMainWindow):
 
                         #Unzipping findBytes.py...
                         zip_ref = zipfile.ZipFile(str(path[0]), 'r')
-                        zip_ref.extractall(".\\resources\\tools\\findBytes\\")
+                        zip_ref.extractall(self.resource_path(".\\resources\\tools\\findBytes\\"))
                         zip_ref.close()
 
                         #Deleting zip file...
                         os.system("del " + str(path[0]))
 
                         #Copying findBytes.py out of folder...
-                        os.system("copy .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py .\\resources\\tools\\findBytes\\")
+                        os.system("copy " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py") + " " + self.resource_path(".\\resources\\tools\\findBytes\\"))
 
                         #Deleting old folder...
                         #1) Deleting contents of folder
                         #2) Deleting actual folder itself
-                        p = os.popen("del .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", "w")
+                        p = os.popen("del " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), "w")
                         p.write("Y")
+                        retcode = p.wait()
 
-                        shutil.rmtree(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", ignore_errors=False, onerror=None)
+                        shutil.rmtree(self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), ignore_errors=False, onerror=None)
 
                         os.system("cls")
                         
@@ -213,22 +229,23 @@ class MainWindow(QMainWindow):
 
                 #Unzipping findBytes.py...
                 zip_ref = zipfile.ZipFile(str(path[0]), 'r')
-                zip_ref.extractall(".\\resources\\tools\\findBytes\\")
+                zip_ref.extractall(self.resource_path(".\\resources\\tools\\findBytes\\"))
                 zip_ref.close()
 
                 #Deleting zip file...
                 os.system("del " + str(path[0]))
 
                 #Copying findBytes.py out of folder...
-                os.system("copy .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py .\\resources\\tools\\findBytes\\")
+                os.system("copy " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189\\findBytes.py") + " " + self.resource_path(".\\resources\\tools\\findBytes\\"))
 
                 #Deleting old folder...
                 #1) Deleting contents of folder
                 #2) Deleting actual folder itself
-                p = os.popen("del .\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", "w")
+                p = os.popen("del " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), "w")
                 p.write("Y")
+                retcode = p.wait()
 
-                shutil.rmtree(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189", ignore_errors=False, onerror=None)
+                shutil.rmtree(self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), ignore_errors=False, onerror=None)
 
                 #Telling user findBytes.py was downloaded...
                 self.choice = QMessageBox()
@@ -270,7 +287,7 @@ class MainWindow(QMainWindow):
     def startOldFile(self):
         """Loads the UI that asks for user's old file (the one they have the offset for)"""
         x, y, width, height = self.getGeometry()
-        self.ui = loadUi(".\\resources\\interfaces\\oldFile\\oldFile.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\oldFile\\oldFile.ui"), self)
         self.setGeometry(x, y, width, height)
 
         self.home.pressed.connect(self.__init__)
@@ -283,7 +300,9 @@ class MainWindow(QMainWindow):
 
     def selectOldFile(self):
         """Asks user to open their old file (the one they already have the offset for)"""
+        global oldFileDir
         self.oldFileDir, self.oldFileExtension = QFileDialog.getOpenFileName(self,"Select OLD File...", "","Decompressed Yaz0 (*.uncompressed)")
+        oldFileDir = str(self.oldFileDir)
         
         self.oldFileName = QFileInfo(self.oldFileDir).fileName()
 
@@ -307,49 +326,54 @@ class MainWindow(QMainWindow):
             else:
                 #Checking which radio button was clicked [old file]
                 if self.header.isChecked():
-                    self.oldFileHeader = "Has *.NSO Header."
+                    global oldFileHeader
+                    oldFileHeader = "Has *.NSO Header."
 
-                    self.oldRemoveHeader = ".\\resources\\temp\\" + str(self.oldFileName)
+                    self.oldRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.oldFileName)
 
                     with open(self.oldFileDir, 'rb') as in_file:
                         with open(self.oldRemoveHeader, 'wb') as out_file:
                             out_file.write(in_file.read()[100:])
 
                 elif self.noHeader.isChecked():
-                    self.newFileHeader = "Doesn't Have *.NSO Header."
+                    oldFileHeader = "Doesn't Have *.NSO Header."
                     
                 x, y, width, height = self.getGeometry()
-                self.ui = loadUi(".\\resources\\interfaces\\newFile\\newFile.ui", self)
+                self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\newFile\\newFile.ui"), self)
                 self.setGeometry(x, y, width, height)
 
                 self.back.pressed.connect(self.startOldFile)
                 self.here.pressed.connect(self.newWindowNSO)
                 self.newFile.pressed.connect(self.selectNewFile)
-                self.Next.pressed.connect(self.getOffset)
+                self.Next.pressed.connect(self.getMultOffsets)
 
 
                 self.show()
         except:
             x, y, width, height = self.getGeometry()
-            self.ui = loadUi(".\\resources\\interfaces\\newFile\\newFile.ui", self)
+            self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\newFile\\newFile.ui"), self)
             self.setGeometry(x, y, width, height)
 
             self.back.pressed.connect(self.startOldFile)
             self.here.pressed.connect(self.newWindowNSO)
             self.newFile.pressed.connect(self.selectNewFile)
-            self.Next.pressed.connect(self.getOffset)
+            self.Next.pressed.connect(self.getMultOffsets)
 
 
             self.show()
 
     def selectNewFile(self):
         """Asks user to open their new file (the one they want to port their offset to)"""
+        global newFileDir
         self.newFileDir, self.newFileExtension = QFileDialog.getOpenFileName(self,"Select NEW File...", "","Decompressed Yaz0 (*.uncompressed)")
+        newFileDir = str(self.newFileDir)
+
+        self.newFileName = QFileInfo(self.newFileDir).fileName()
 
         self.plainTextEdit.setPlainText(self.newFileDir)
 
-    def getOffset(self):
-        """Asks user for their old offset, which will then be ported to their new version file"""
+    def getMultOffsets(self):
+        """Allows user to put as many offsets as they'd like in findBytes GUI"""
         #We need to use a "try" block, for if the user picks "find new offset from SAME files", the program doesn't crash
         try:
             # Makes sure all info is filled out on-screen
@@ -364,81 +388,62 @@ class MainWindow(QMainWindow):
                 self.choice.exec_()
 
             else:
-                self.newFileName = QFileInfo(self.newFileDir).fileName()
                 #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
                 try:
                     #Checking which radio button is checked [new file]
                     if self.header.isChecked():
-                        self.newFileHeader = "Has *.NSO Header."
+                        global newFileHeader
+                        newFileHeader = "Has *.NSO Header."
 
-                        self.newRemoveHeader = ".\\resources\\temp\\" + str(self.newFileName)
+                        self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
 
                         with open(self.newFileDir, 'rb') as in_file:
                             with open(self.newRemoveHeader, 'wb') as out_file:
                                 out_file.write(in_file.read()[100:])
 
                     elif self.noHeader.isChecked():
-                        self.newFileHeader = "Doesn't Have *.NSO Header."
+                        newFileHeader = "Doesn't Have *.NSO Header."
                 except:
                     pass
 
                 x, y, width, height = self.getGeometry()
-                self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
+                self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\getMultipleOffsets\\getMultipleOffsets.ui"), self)
                 self.setGeometry(x, y, width, height)
 
                 self.back.pressed.connect(self.startNewFile)
-                self.here.pressed.connect(self.newWindowOffsetTut)
-                self.Next.pressed.connect(self.allDone)
-                self.multipleOffsets.pressed.connect(self.getMultOffsets)
-
-                self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
-                self.newFileSet.setText(str(self.newFileDir) + "; " + self.newFileHeader)
+                self.Settings.pressed.connect(self.settings)
+                self.howTo.pressed.connect(self.howToMultipleOffsets)
+                self.Next.pressed.connect(self.multOffsetsParsing)
 
                 self.show()
         except:
-            self.newFileName = QFileInfo(self.newFileDir).fileName()
             #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
             try:
                 #Checking which radio button is checked [new file]
                 if self.header.isChecked():
-                    self.newFileHeader = "Has *.NSO Header."
+                    newFileHeader = "Has *.NSO Header."
 
-                    self.newRemoveHeader = ".\\resources\\temp\\" + str(self.newFileName)
+                    self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
 
                     with open(self.newFileDir, 'rb') as in_file:
                         with open(self.newRemoveHeader, 'wb') as out_file:
                             out_file.write(in_file.read()[100:])
 
                 elif self.noHeader.isChecked():
-                    self.newFileHeader = "Doesn't Have *.NSO Header."
+                    newFileHeader = "Doesn't Have *.NSO Header."
             except:
                 pass
 
             x, y, width, height = self.getGeometry()
-            self.ui = loadUi(".\\resources\\interfaces\\getOffset\\getOffset.ui", self)
+            self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\getMultipleOffsets\\getMultipleOffsets.ui"), self)
             self.setGeometry(x, y, width, height)
 
             self.back.pressed.connect(self.startNewFile)
-            self.here.pressed.connect(self.newWindowOffsetTut)
-            self.Next.pressed.connect(self.allDone)
-            self.multipleOffsets.pressed.connect(self.getMultOffsets)
-
-            self.oldFileSet.setText(str(self.oldFileDir) + "; " + self.oldFileHeader)
-            self.newFileSet.setText(str(self.newFileDir) + "; " + self.newFileHeader)
+            self.Settings.pressed.connect(self.settings)
+            self.howTo.pressed.connect(self.howToMultipleOffsets)
+            self.Next.pressed.connect(self.multOffsetsParsing)
 
             self.show()
-
-    def getMultOffsets(self):
-        """Allows user to put as many offsets as they'd like in findBytes GUI"""
-        x, y, width, height = self.getGeometry()
-        self.ui = loadUi(".\\resources\\interfaces\\getMultipleOffsets\\getMultipleOffsets.ui", self)
-        self.setGeometry(x, y, width, height)
-
-        self.back.pressed.connect(self.getOffset)
-        self.howTo.pressed.connect(self.howToMultipleOffsets)
-        self.Next.pressed.connect(self.multOffsetsParsing)
-
-        self.show()
 
     def multOffsetsParsing(self):
         """Multiple Offsets Parsing"""
@@ -466,14 +471,14 @@ class MainWindow(QMainWindow):
                 self.patches = []
                 
                 #Writing all offsets that were given from user
-                file = io.open(".\\resources\\offsets\\offsets.txt", "w", encoding="utf-8")
+                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "w", encoding="utf-8")
                 text = self.offsets.toPlainText()
                 file.write(text)
                 file.close()
 
                 #Reading the offsets
                 hexCheckOffset = True
-                file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
                 for lines in file.readlines():
                     try:
                         tokens = lines.split(" ")
@@ -491,7 +496,7 @@ class MainWindow(QMainWindow):
 
                 #Reading the patches
                 hexCheckPatch = True
-                file = io.open(".\\resources\\offsets\\offsets.txt", "r", encoding="utf-8")
+                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
                 for lines in file.readlines():
                     try:
                         tokens = lines.split(" ")
@@ -525,7 +530,7 @@ class MainWindow(QMainWindow):
                         fixedOffset = self.oldOffsets[items].split("\n")
                         self.oldOffsets[items] = fixedOffset[0]
                         
-                        cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
+                        cmd = str("python " + self.resource_path(".\\resources\\tools\\findBytes\\findBytes.py") + " " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
                         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
                         finalOutput = p.stdout.read()
                         retcode = p.wait()
@@ -585,7 +590,7 @@ class MainWindow(QMainWindow):
     def allDoneMultipleOffsets(self):
         """Final UI for those who are porting multiple offsets/patches"""
         x, y, width, height = self.getGeometry()
-        self.ui = loadUi(".\\resources\\interfaces\\multAllDone\\multAllDone.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\multAllDone\\multAllDone.ui"), self)
         self.setGeometry(x, y, width, height)
 
         failed = False
@@ -625,76 +630,6 @@ class MainWindow(QMainWindow):
         self.options.pressed.connect(self.userOptions)
 
         self.show()
-                                             
-
-
-    def allDone(self):
-        """Last UI--returns your new offset via findBytes--"""
-        #Making sure user has findBytes.py downloaded...
-        self.findBytes("full")
-        # Makes sure all info is filled out on-screen
-        if str(self.offset.toPlainText()) == "":
-            self.choice = QMessageBox()
-            self.choice.setIcon(QMessageBox.Warning)
-            self.choice.setWindowTitle("Is everything filled out?")
-            self.choice.setText('You are missing required information. Please fulfil these requirements first, before proceeding. When done, click "Next" again.')
-            self.choice.setStandardButtons(QMessageBox.Ok)
-            self.choice.exec_()
-
-        else:
-            #Checking if user entered valid offsets/patches...
-            hexCheck = True
-            try:
-                int(self.offset.toPlainText(), 16)
-            except:
-                hexCheck = False
-                
-            #Telling user their offset is not a valid hex number (if it isn't)
-            if hexCheck == False:
-                self.choice = QMessageBox()
-                self.choice.setIcon(QMessageBox.Warning)
-                self.choice.setWindowTitle("Invalid hex digits...")
-                self.choice.setText('Your patch is an invalid hex number. Please make sure you typed your offset in correctly, then try again.')
-                self.choice.setStandardButtons(QMessageBox.Ok)
-                self.choice.exec_()
-            else:
-                #Reading output from findBytes.py
-                try:
-                    cmd = str("python " + ".\\resources\\tools\\findBytes\\findBytes.py " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.offset.toPlainText()))
-                    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)#, stderr=subprocess.IGNORE)
-                    finalOutput = p.stdout.read()
-                    retcode = p.wait()
-                    finalOutput = str(finalOutput)
-                    finalOutput = finalOutput[2:len(finalOutput) - 5]
-                except:
-                    pass
-                ######
-
-                x, y, width, height = self.getGeometry()
-                self.ui = loadUi(".\\resources\\interfaces\\allDone\\allDone.ui", self)
-                self.setGeometry(x, y, width, height)
-
-                # Setting old offset and new, ported offset...
-                self.newOffset.setPlainText(str(finalOutput))
-                self.oldOffset.setPlainText(str(self.offset.toPlainText()))
-
-                if str(finalOutput)[0] == "-":
-                    self.choice = QMessageBox()
-                    self.choice.setIcon(QMessageBox.Warning)
-                    self.choice.setWindowTitle("Failed to port...")
-                    self.choice.setText('Your offset could not be ported.')
-                    self.choice.setStandardButtons(QMessageBox.Ok)
-                    self.choice.exec_()
-                ######
-
-                self.sameFiles.pressed.connect(self.getOffset)
-                self.differentFiles.pressed.connect(self.startOldFile)
-                self.quit.pressed.connect(self.quitProgram)
-
-                self.credits.pressed.connect(self.creditWin)
-                self.convertOffset.pressed.connect(self.offsetConversions)
-
-                self.show()
 
     #Functions that create Secondary Windows
 
@@ -718,6 +653,10 @@ class MainWindow(QMainWindow):
         self.window = multOffsetsHelp()
         self.window.show()
 
+    def settings(self):
+        self.window = fileSettings()
+        self.window.show()
+
     def userOptions(self):
         self.window = finalOptions(self)
         self.window.show()
@@ -736,41 +675,121 @@ class decompressNSO(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(decompressNSO, self).__init__(*args, **kwargs)
 
-        self.ui = loadUi(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui"), self)
 
         self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 class offsetTut(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(offsetTut, self).__init__(*args, **kwargs)
 
-        self.ui = loadUi(".\\resources\\interfaces\\offsetInstructions\\offsetInstructions.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\offsetInstructions\\offsetInstructions.ui"), self)
 
         self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 class credit(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(credit, self).__init__(*args, **kwargs)
 
-        self.ui = loadUi(".\\resources\\interfaces\\credits\\credits.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\credits\\credits.ui"), self)
 
         self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 class convertOffset(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(convertOffset, self).__init__(*args, **kwargs)
 
-        self.ui = loadUi(".\\resources\\interfaces\\convertOffset\\convertOffset.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\convertOffset\\convertOffset.ui"), self)
 
         self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 class multOffsetsHelp(QMainWindow):
     def __init__(self, *args, **kwargs):
         super(multOffsetsHelp, self).__init__(*args, **kwargs)
 
-        self.ui = loadUi(".\\resources\\interfaces\\multipleOffsetsInstructions\\multipleOffsetsInstructions.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\multipleOffsetsInstructions\\multipleOffsetsInstructions.ui"), self)
+
+        self.syntax.pressed.connect(self.loadTutorial)
 
         self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
+    def loadTutorial(self):
+        os.system('start "" https://github.com/AmazingChz/findBytes-GUI/blob/6.0/syntax.md')
+
+class fileSettings(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(fileSettings, self).__init__(*args, **kwargs)
+
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\fileSettings\\fileSettings.ui"), self)
+
+        global oldFileDir, newFileDir, oldFileHeader, newFileHeader
+
+        self.oldFileSet.setText(str(oldFileDir) + " --- " + oldFileHeader)
+        self.newFileSet.setText(str(newFileDir) + " --- " + newFileHeader)
+
+        self.ui.adjustSize()
+
+        self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 class finalOptions(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -778,7 +797,7 @@ class finalOptions(QMainWindow):
 
         self.arguments = args[0]
 
-        self.ui = loadUi(".\\resources\\interfaces\\options\\options.ui", self)
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\options\\options.ui"), self)
 
         self.offsetConversions.pressed.connect(self.offsetCon)
         self.sameFiles.pressed.connect(self.getSameFilesOffset)
@@ -788,29 +807,56 @@ class finalOptions(QMainWindow):
 
         self.show()
 
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
     def offsetCon(self):
         self.window = convertOffset()
         self.window.show()
 
     def getSameFilesOffset(self):
         self.close()
-        self.arguments.getOffset()
+        self.arguments.getMultOffsets()
 
     def getDifferentFilesOffset(self):
         self.close()
         self.arguments.startOldFile()
 
     def quitProgram(self):
-        sys.exit(0)
+        sys.exit()
 
     def creditProgram(self):
         self.window = credit()
         self.window.show()
 
 
-######################################################################################### 
+#########################################################################################
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 if __name__ == '__main__':
-    app = QApplication([])
-    main_window = MainWindow()
-    app.exec_()
+    #Checking if user wants to decompress *.NSO
+    if len(sys.argv) == 2:
+        os.system(resource_path(".\\resources\\tools\\hactool\\hactool") + " -t nso {0} --uncompressed={0}.uncompressed".format(sys.argv[1]))
+        print("hactool -t nso {0} --uncompressed={0}.uncompressed".format(sys.argv[1]))
+        sys.exit()
+    else:
+        #Running normal findBytes GUI
+        app = QApplication([])
+        main_window = MainWindow()
+        app.exec_()

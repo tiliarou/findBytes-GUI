@@ -36,7 +36,7 @@ Drag and drop your *.NSO file onto &quot;decompressNSO.bat&quot;.
 
 ---
 
-&quot;decompressNSO.bat&quot; can be found in the same directory as where you run findBytes GUI (&quot;RUN.exe&quot;).</string>
+&quot;decompressNSO.bat&quot; can be found in the same directory as where you run findBytes GUI (&quot;findBytes-GUI.exe&quot;).</string>
       </property>
      </widget>
     </item>
