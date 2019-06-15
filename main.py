@@ -192,7 +192,6 @@ class MainWindow(QMainWindow):
                         #2) Deleting actual folder itself
                         p = os.popen("del " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), "w")
                         p.write("Y")
-                        retcode = p.wait()
 
                         shutil.rmtree(self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), ignore_errors=False, onerror=None)
 
@@ -243,7 +242,6 @@ class MainWindow(QMainWindow):
                 #2) Deleting actual folder itself
                 p = os.popen("del " + self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), "w")
                 p.write("Y")
-                retcode = p.wait()
 
                 shutil.rmtree(self.resource_path(".\\resources\\tools\\findBytes\\ffd6d257f148aab0b74bfc50dfe43e80-9b46f05d72d8c292f1fecd67be9b8dfbf1645189"), ignore_errors=False, onerror=None)
 
