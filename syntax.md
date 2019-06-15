@@ -1,4 +1,4 @@
-# findBytes GUI Syntax
+# findBytes GUI's Syntax
 
 When using findBytes GUI, the program expects your offsets in a certain format. Below, you will find details on how to correctly port your offsets!
 
