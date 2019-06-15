@@ -67,4 +67,4 @@ example:
 ---
 
 Couldn't find the answer you were looking for? Still have a question?
-Hit me up on *Discord*: @AmazingChz#5695
+Hit me up on *Discord*: **@AmazingChz#5695**
