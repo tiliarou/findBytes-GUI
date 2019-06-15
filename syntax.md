@@ -31,7 +31,7 @@ example:
 
 ---
 
-### Common Mistakes...
+## Common Mistakes...
 
 1. Don't leave extra lines before, after, or between offsets/patches!
 	
