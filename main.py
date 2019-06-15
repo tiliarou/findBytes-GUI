@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
                 latest = release.title
 
         #Telling user there is a new release (if there is one)
-        if latest != "I don't like bugs, so I fixed them :>":
+        if latest != "Making things easier and faster...always.":
             self.choice = QMessageBox()
             self.choice.setIcon(QMessageBox.Information)
             self.choice.setWindowTitle("New release is available...")
