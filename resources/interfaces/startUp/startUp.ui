@@ -64,6 +64,9 @@
           <pointsize>18</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 85, 255);</string>
+        </property>
         <property name="text">
          <string>GitHub</string>
         </property>
