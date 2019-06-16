@@ -148,7 +148,7 @@ class MainWindow(QMainWindow):
             self.choice = QMessageBox()
             self.choice.setIcon(QMessageBox.Information)
             self.choice.setWindowTitle("New release is available...")
-            self.choice.setText('There is a new version of findBytes-GUI available!\n\nWould you like to view the latest release on GitHub?')
+            self.choice.setText('There is a new version of findBytes GUI available!\n\nWould you like to view the latest release on GitHub?')
             self.choice.addButton(QMessageBox.Yes)
             self.choice.addButton(QMessageBox.No)
             result = self.choice.exec_()
