@@ -459,114 +459,72 @@ class MainWindow(QMainWindow):
             self.choice.setStandardButtons(QMessageBox.Ok)
             self.choice.exec_()
         else:
-            self.choice = QMessageBox()
-            self.choice.setIcon(QMessageBox.Information)
-            self.choice.setWindowTitle("This may take awhile...")
-            self.choice.setText("It may take a few minutes to port all of your offsets. The time needed depends on how many offsets you are currently porting.\n\nThis program may freeze and stop working. Do not worry, this is normal; just be patient.")
-            self.choice.setStandardButtons(QMessageBox.Ok)
-            self.choice.addButton(QMessageBox.Cancel)
-            returnValue = self.choice.exec_()
-
-            if returnValue == QMessageBox.Cancel:
-                pass
-            else:
-                self.oldOffsets = []
-                self.patches = []
+            self.oldOffsets = []
+            self.patches = []
                 
-                #Writing all offsets that were given from user
-                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "w", encoding="utf-8")
-                text = self.offsets.toPlainText()
-                file.write(text)
-                file.close()
+            #Writing all offsets that were given from user
+            file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "w", encoding="utf-8")
+            text = self.offsets.toPlainText()
+            file.write(text)
+            file.close()
 
-                #Reading the offsets
-                hexCheckOffset = True
-                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
-                for lines in file.readlines():
+            #Reading the offsets
+            hexCheckOffset = True
+            hexCheckOffsetSpace = True
+            file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
+            for lines in file.readlines():
+                try:
+                    tokens = lines.split(" ")
+                    self.oldOffsets.append(tokens[0])
+
+                    #Making sure offset is a valid hex number...
                     try:
-                        tokens = lines.split(" ")
-                        self.oldOffsets.append(tokens[0])
-
-                        #Making sure patch is a valid hex number...
-                        if tokens[0] != " ":
-                            try:
-                                int(tokens[0], 16)
-                            except:
-                                hexCheckOffset = False
+                        int(tokens[0], 16)
                     except:
-                        continue
-                file.close()
+                        if tokens[0] == "":
+                            hexCheckOffsetSpace = False
+                        else:
+                            hexCheckOffset = False
+                except:
+                    continue
+            file.close()
 
-                #Reading the patches
-                hexCheckPatch = True
-                file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
-                for lines in file.readlines():
+            #Reading the patches
+            hexCheckPatch = True
+            file = io.open(self.resource_path(".\\resources\\offsets\\offsets.txt"), "r", encoding="utf-8")
+            for lines in file.readlines():
+                try:
+                    tokens = lines.split(" ")
+                    #Adding all patches to self.patches...
+                    global patch
+                    patch = ""
+                    for items in range(len(tokens)):
+                        try:
+                            patch += " " + str(tokens[items + 1])
+                        except:
+                            continue
+                    self.patches.append(patch)
+
+                    #Making sure patch is a valid patch...
                     try:
-                        tokens = lines.split(" ")
-                        #Adding all patches to self.patches...
-                        global patch
-                        patch = ""
-                        for items in range(len(tokens)):
-                            try:
-                                patch += " " + str(tokens[items + 1])
-                            except:
-                                continue
-                        self.patches.append(patch)
-
-                        #Making sure patch is a valid patch...
-                        if patch != " ":
-                            try:
-                                str(patch)
-                            except:
-                                hexCheckPatch = False
+                        str(patch)
                     except:
-                        continue
-                file.close()
+                        hexCheckPatch = False
+                except:
+                    continue
+            file.close()
 
-                #Making sure user has findBytes.py downloaded...
-                self.findBytes("full")
-
-                #Porting the offsets via findBytes.py
-                self.ported = []
-                for items in range(len(self.oldOffsets)):
-                    try:
-                        fixedOffset = self.oldOffsets[items].split("\n")
-                        self.oldOffsets[items] = fixedOffset[0]
-                        
-                        cmd = str("python " + self.resource_path(".\\resources\\tools\\findBytes\\findBytes.py") + " " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
-                        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-                        finalOutput = p.stdout.read()
-                        retcode = p.wait()
-                        finalOutput = str(finalOutput)
-                        finalOutput = finalOutput[2:len(finalOutput) - 5]
-                        self.ported.append(finalOutput)
-                    except:
-                        continue
-
-                #Removing "\n", etc. from old patches
-                for items in range(len(self.patches)):
-                    try:
-                        fixedOffset = self.patches[items].split("\n")
-                        self.patches[items] = fixedOffset[0]
-                    except:
-                        continue
-
-                #Checking if user did not supply patches (at all)
-                if len(self.patches) <= 0:
-                    while len(self.patches) != len(self.oldOffsets):
-                        for items in range(len(self.oldOffsets)):
-                            self.patches.insert(0, " ")
-                    
-                #Checking if number of offsets = number of patches
-                if len(self.oldOffsets) != len(self.patches):
-                    self.choice = QMessageBox()
-                    self.choice.setIcon(QMessageBox.Warning)
-                    self.choice.setWindowTitle("Found empty lines...")
-                    self.choice.setText('It looks like you have empty lines before, in the middle, or after your offsets. Please remove these unnecessary lines first, before proceeding.')
-                    self.choice.setStandardButtons(QMessageBox.Ok)
-                    self.choice.exec_()
+            #Checking if any offset is a space (" ")...
+            if hexCheckOffsetSpace == False:
+                self.choice = QMessageBox()
+                self.choice.setIcon(QMessageBox.Warning)
+                self.choice.setWindowTitle("Found empty lines...")
+                self.choice.setText('It looks like you have empty spaces/lines scattered across your offsets/patches. Please remove these unnecessary spaces/lines first, before proceeding.\n\nIf the problem persists, click the "HOW TO" button at the top right of this screen, then click the "Syntax Tutorial" in the middle.')
+                self.choice.setStandardButtons(QMessageBox.Ok)
+                self.choice.exec_()
+            else:
                 #Checking if user entered valid offsets/patches...
-                elif hexCheckOffset == False and hexCheckPatch == False:
+                if hexCheckOffset == False and hexCheckPatch == False:
                     self.choice = QMessageBox()
                     self.choice.setIcon(QMessageBox.Warning)
                     self.choice.setWindowTitle("Invalid hex digits and patches...")
@@ -577,7 +535,7 @@ class MainWindow(QMainWindow):
                     self.choice = QMessageBox()
                     self.choice.setIcon(QMessageBox.Warning)
                     self.choice.setWindowTitle("Invalid hex digits...")
-                    self.choice.setText('One or more of your offsets is not valid.\n\nPlease make sure you typed your offsets in correctly, then try again.')
+                    self.choice.setText('One or more of your offsets do not have valid hex digits.\n\nPlease make sure you typed your offsets in correctly, then try again.')
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 elif hexCheckPatch == False:
@@ -588,7 +546,53 @@ class MainWindow(QMainWindow):
                     self.choice.setStandardButtons(QMessageBox.Ok)
                     self.choice.exec_()
                 else:
-                    self.allDoneMultipleOffsets()
+                    self.choice = QMessageBox()
+                    self.choice.setIcon(QMessageBox.Information)
+                    self.choice.setWindowTitle("This may take awhile...")
+                    self.choice.setText("It may take a few minutes to port all of your offsets. The time needed depends on how many offsets you are currently porting.\n\nThis program may freeze and stop working. Do not worry, this is normal; just be patient.")
+                    self.choice.setStandardButtons(QMessageBox.Ok)
+                    self.choice.addButton(QMessageBox.Cancel)
+                    returnValue = self.choice.exec_()
+
+                    if returnValue == QMessageBox.Cancel:
+                        pass
+                    else:
+                        #Making sure user has findBytes.py downloaded...
+                        self.findBytes("full")
+
+                        #Porting the offsets via findBytes.py
+                        self.ported = []
+                        for items in range(len(self.oldOffsets)):
+                            try:
+                                fixedOffset = self.oldOffsets[items].split("\n")
+                                self.oldOffsets[items] = fixedOffset[0]
+                                    
+                                cmd = str("python " + self.resource_path(".\\resources\\tools\\findBytes\\findBytes.py") + " " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(self.oldOffsets[items]))
+                                p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+                                finalOutput = p.stdout.read()
+                                retcode = p.wait()
+                                finalOutput = str(finalOutput)
+                                finalOutput = finalOutput[2:len(finalOutput) - 5]
+                                self.ported.append(finalOutput)
+                            except:
+                                continue
+
+                        #Removing "\n", etc. from old patches
+                        for items in range(len(self.patches)):
+                            try:
+                                fixedOffset = self.patches[items].split("\n")
+                                self.patches[items] = fixedOffset[0]
+                            except:
+                                continue
+
+                        #Checking if user did not supply patches (at all)
+                        if len(self.patches) <= 0:
+                            while len(self.patches) != len(self.oldOffsets):
+                                for items in range(len(self.oldOffsets)):
+                                    self.patches.insert(0, " ")
+
+                        #Calling final UI function woo!
+                        self.allDoneMultipleOffsets()
 
     def allDoneMultipleOffsets(self):
         """Final UI for those who are porting multiple offsets/patches"""
