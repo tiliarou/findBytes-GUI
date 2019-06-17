@@ -1,6 +1,10 @@
 ﻿""" This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
 stuff too that I can't think of currently ¯\_(ツ)_/¯ . Besides all of that though, I hope you find the tool useful. Cheers """
 
+#MESSAGE FOR AMAZINGCHZ (so I don't forget lol)
+# YOU NEED TO CHANGE RELEASE TITLE AND SYNTAX.MD LINK EACH VERSION!!!!!
+#----------------------------------------------------------------------
+
 import sys
 import time
 
@@ -539,7 +543,7 @@ class MainWindow(QMainWindow):
                     except:
                         continue
 
-               #Removing "\n", etc. from old patches
+                #Removing "\n", etc. from old patches
                 for items in range(len(self.patches)):
                     try:
                         fixedOffset = self.patches[items].split("\n")
@@ -849,11 +853,11 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 if __name__ == '__main__':
-    print("Loading findBytes GUI. Please stand-by...")
     #Hiding console :P
-    whnd = ctypes.windll.kernel32.GetConsoleWindow()
+    #should only be uncommented, when compiling...
+    """whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
-        ctypes.windll.user32.ShowWindow(whnd, 0)
+        ctypes.windll.user32.ShowWindow(whnd, 0)"""
         
     #Checking if user wants to decompress *.NSO
     if len(sys.argv) == 2:
