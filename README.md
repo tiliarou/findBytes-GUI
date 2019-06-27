@@ -27,7 +27,7 @@
   
   - Download and extract [findBytes](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80)
   
-  - Put [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) into `\resources\tools\findBytes\`
+  - Put [findBytes.py](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) into `/resources/tools/findBytes/`
   
   - Run "**main.py**", and follow its instructions
   
