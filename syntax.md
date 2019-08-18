@@ -22,7 +22,7 @@ example:
 
 **Porting patches:**
 
-If you are porting IPS-Witch patches, just press enter between each offset & patch. The left side should be the offsets, while the right side should be the patches. 
+If you are porting IPS-Witch patches, just press enter between each offset & patch. The left side should be the offsets, while the right side should be the patches. Do not include the comment or `@enabled` in IPS-Witch patches, into findBytes GUI. Just type in the actual patches.
 
 example:
 		
@@ -64,6 +64,16 @@ example:
     0E251731 C0035FD6
     0E816221
 
+---
+
+4. Don't include name-comments or `@enabled` (found in IPS-Witch patches) when typing in your patch into findBytes GUI.
+
+example:
+
+    // Offline Shop [Zewia] (4.3.0)
+    @enabled
+    0138F628 200080D2
+    
 ---
 
 Couldn't find the answer you were looking for? Still have a question?
