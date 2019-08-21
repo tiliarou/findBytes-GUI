@@ -81,6 +81,19 @@ import shutil
 global counter
 counter = 0
 
+#Writing default option for user...
+global oldFileHeader, newFileHeader
+oldFileHeader = "Auto-Decide"
+newFileHeader = "Auto-Decide"
+
+f = open(".\\resources\\advanced\\oldFile.txt", "w")
+f.write(oldFileHeader)
+f.close()
+
+f = open(".\\resources\\advanced\\newFile.txt", "w")
+f.write(newFileHeader)
+f.close()
+
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         """Welcome UI"""
@@ -109,12 +122,12 @@ class MainWindow(QMainWindow):
         self.show()
 
         #Declaring variables, to prevent future possible errors, later on.
-        global oldFileDir, newFileDir, oldFileHeader, newFileHeader
+        '''global oldFileDir, newFileDir, oldFileHeader, newFileHeader
         oldFileDir = ""
         newFileDir = ""
 
         oldFileHeader = ""
-        newFileHeader = ""
+        newFileHeader = ""'''
 
         #Checking if there is new version of findBytes GUI
         self.checkForUpdate()
@@ -295,6 +308,7 @@ class MainWindow(QMainWindow):
 
         self.home.pressed.connect(self.__init__)
         self.here.pressed.connect(self.newWindowNSO)
+        self.advanced.pressed.connect(self.advOld)
         self.newFile.pressed.connect(self.selectOldFile)
         self.Next.pressed.connect(self.startNewFile)
 
@@ -316,9 +330,7 @@ class MainWindow(QMainWindow):
         #Putting in try, as user has option to come back to this screen if they want. Without try, this would cause an error
         # Makes sure all info is filled out on-screen
         try:
-            checkHeader = self.header.isChecked()
-            checkNoHeader = self.noHeader.isChecked()
-            if str(self.plainTextEdit.toPlainText()) == "" or checkHeader == False and checkNoHeader == False:
+            if str(self.plainTextEdit.toPlainText()) == "":
                 self.choice = QMessageBox()
                 self.choice.setIcon(QMessageBox.Warning)
                 self.choice.setWindowTitle("Is everything filled out?")
@@ -328,18 +340,28 @@ class MainWindow(QMainWindow):
 
             else:
                 #Checking which radio button was clicked [old file]
-                if self.header.isChecked():
-                    global oldFileHeader
-                    oldFileHeader = "Has *.NSO Header."
+                f = open(".\\resources\\advanced\\oldFile.txt", "r")
+                global oldFileHeader
+                oldFileHeader = str(f.read())
+                f.close()
 
+                if oldFileHeader == "Auto-Decide":
+                    with open(self.oldFileDir, 'rb') as f:
+                        hexdata = str(f.read().hex())
+
+                    #Checking if "main.nso" has *.NSO header or not...
+                    if hexdata[0:8] == "4E534F30" or hexdata[0:8] == "4e534f30" or hexdata[0:11] == "4E 53 4F 30" or hexdata[0:11] == "4e 53 4f 30":
+                        oldFileHeader = "Has *.NSO Header."
+                    else:
+                        oldFileHeader = "Doesn't Have *.NSO Header."
+
+                #Removing header (if file has header)...
+                if oldFileHeader == "Has *.NSO Header.":
                     self.oldRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.oldFileName)
 
                     with open(self.oldFileDir, 'rb') as in_file:
                         with open(self.oldRemoveHeader, 'wb') as out_file:
                             out_file.write(in_file.read()[100:])
-
-                elif self.noHeader.isChecked():
-                    oldFileHeader = "Doesn't Have *.NSO Header."
                     
                 x, y, width, height = self.getGeometry()
                 self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\newFile\\newFile.ui"), self)
@@ -348,6 +370,7 @@ class MainWindow(QMainWindow):
                 self.back.pressed.connect(self.startOldFile)
                 self.here.pressed.connect(self.newWindowNSO)
                 self.newFile.pressed.connect(self.selectNewFile)
+                self.advanced.pressed.connect(self.advNew)
                 self.Next.pressed.connect(self.getMultOffsets)
 
 
@@ -360,6 +383,7 @@ class MainWindow(QMainWindow):
             self.back.pressed.connect(self.startOldFile)
             self.here.pressed.connect(self.newWindowNSO)
             self.newFile.pressed.connect(self.selectNewFile)
+            self.advanced.pressed.connect(self.advNew)
             self.Next.pressed.connect(self.getMultOffsets)
 
 
@@ -380,9 +404,7 @@ class MainWindow(QMainWindow):
         #We need to use a "try" block, for if the user picks "find new offset from SAME files", the program doesn't crash
         try:
             # Makes sure all info is filled out on-screen
-            checkHeader = self.header.isChecked()
-            checkNoHeader = self.noHeader.isChecked()
-            if str(self.plainTextEdit.toPlainText()) == "" or checkHeader == False and checkNoHeader == False:
+            if str(self.plainTextEdit.toPlainText()) == "":
                 self.choice = QMessageBox()
                 self.choice.setIcon(QMessageBox.Warning)
                 self.choice.setWindowTitle("Is everything filled out?")
@@ -393,7 +415,7 @@ class MainWindow(QMainWindow):
             else:
                 #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
                 try:
-                    #Checking which radio button is checked [new file]
+                    '''#Checking which radio button is checked [new file]
                     if self.header.isChecked():
                         global newFileHeader
                         newFileHeader = "Has *.NSO Header."
@@ -405,7 +427,31 @@ class MainWindow(QMainWindow):
                                 out_file.write(in_file.read()[100:])
 
                     elif self.noHeader.isChecked():
-                        newFileHeader = "Doesn't Have *.NSO Header."
+                        newFileHeader = "Doesn't Have *.NSO Header."'''
+
+                    #Checking which radio button was clicked [new file]
+                    f = open(".\\resources\\advanced\\newFile.txt", "r")
+                    global newFileHeader
+                    newFileHeader = str(f.read())
+                    f.close()
+
+                    if newFileHeader == "Auto-Decide":
+                        with open(self.newFileDir, 'rb') as f:
+                            hexdata = str(f.read().hex())
+
+                        #Checking if "main.nso" has *.NSO header or not...
+                        if hexdata[0:8] == "4E534F30" or hexdata[0:8] == "4e534f30" or hexdata[0:11] == "4E 53 4F 30" or hexdata[0:11] == "4e 53 4f 30":
+                            newFileHeader = "Has *.NSO Header."
+                        else:
+                            newFileHeader = "Doesn't Have *.NSO Header."
+
+                    #Removing header (if file has header)...
+                    if newFileHeader == "Has *.NSO Header.":
+                        self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
+
+                        with open(self.newFileDir, 'rb') as in_file:
+                            with open(self.newRemoveHeader, 'wb') as out_file:
+                                out_file.write(in_file.read()[100:])
                 except:
                     pass
 
@@ -423,7 +469,7 @@ class MainWindow(QMainWindow):
             #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
             try:
                 #Checking which radio button is checked [new file]
-                if self.header.isChecked():
+                '''if self.header.isChecked():
                     newFileHeader = "Has *.NSO Header."
 
                     self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
@@ -433,7 +479,29 @@ class MainWindow(QMainWindow):
                             out_file.write(in_file.read()[100:])
 
                 elif self.noHeader.isChecked():
-                    newFileHeader = "Doesn't Have *.NSO Header."
+                    newFileHeader = "Doesn't Have *.NSO Header."'''
+                #Checking which radio button was clicked [new file]
+                f = open(".\\resources\\advanced\\newFile.txt", "r")
+                newFileHeader = str(f.read())
+                f.close()
+
+                if newFileHeader == "Auto-Decide":
+                    with open(self.newFileDir, 'rb') as f:
+                        hexdata = str(f.read().hex())
+
+                    #Checking if "main.nso" has *.NSO header or not...
+                    if hexdata[0:8] == "4E534F30" or hexdata[0:8] == "4e534f30" or hexdata[0:11] == "4E 53 4F 30" or hexdata[0:11] == "4e 53 4f 30":
+                        newFileHeader = "Has *.NSO Header."
+                    else:
+                        newFileHeader = "Doesn't Have *.NSO Header."
+
+                #Removing header (if file has header)...
+                if newFileHeader == "Has *.NSO Header.":
+                    self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
+
+                    with open(self.newFileDir, 'rb') as in_file:
+                        with open(self.newRemoveHeader, 'wb') as out_file:
+                            out_file.write(in_file.read()[100:])
             except:
                 pass
 
@@ -644,6 +712,14 @@ class MainWindow(QMainWindow):
         self.window = decompressNSO()
         self.window.show()
 
+    def advOld(self):
+        self.window = advancedOld()
+        self.window.show()
+
+    def advNew(self):
+        self.window = advancedNew()
+        self.window.show()
+
     def newWindowOffsetTut(self):
         self.window = offsetTut()
         self.window.show()
@@ -683,6 +759,202 @@ class decompressNSO(QMainWindow):
         super(decompressNSO, self).__init__(*args, **kwargs)
 
         self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\decompressNSOInstructions\\decompressNSOInstructions.ui"), self)
+
+        self.show()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
+class advancedOld(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(advancedOld, self).__init__(*args, **kwargs)
+
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\oldFile\\advanced.ui"), self)
+
+        global oldFileHeader
+        if oldFileHeader == "Auto-Decide":
+            self.automatic.setChecked(True)
+        elif oldFileHeader == "Has *.NSO Header.":
+            self.header.setChecked(True)
+        elif oldFileHeader == "Doesn't Have *.NSO Header.":
+            self.noHeader.setChecked(True)
+
+        self.question.pressed.connect(self.ques)
+        self.save.pressed.connect(self.saveOld)
+
+        self.ui.setFixedSize(self.ui.size())
+
+        self.show()
+
+    def closeEvent(self, event):
+        #"Holder" variable in case user doesn't save their settings (by pressing "X")...
+        global oldFileHeader
+        #Checks if user didn't change their settings...
+        if self.automatic.isChecked() and oldFileHeader == "Auto-Decide" or self.header.isChecked() and oldFileHeader == "Has *.NSO Header." or self.noHeader.isChecked() and oldFileHeader == "Doesn't Have *.NSO Header.":
+            self.showDialog = False
+        else:
+            self.showDialog = True
+
+        if self.showDialog == True:
+            reply = QMessageBox.warning(
+                self, "You forgot to save your settings!",
+                "Would you like to save your settings, before closing this window?",
+                QMessageBox.Save | QMessageBox.Close)
+
+            if reply == QMessageBox.Close:
+                #Telling user their settings were NOT saved...
+                QMessageBox.critical(
+                    self, "Settings NOT saved",
+                    "Your settings were NOT saved.",
+                    QMessageBox.Ok)
+                event.accept()
+            else:
+                #Saving user's settings...
+                self.close()
+                self.saveOld()
+
+        else:
+            event.accept()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
+    def saveOld(self):
+        """Writes user's option into .\\resources\\advanced\\oldFile.txt"""
+        global oldFileHeader
+        if self.header.isChecked():
+            oldFileHeader = "Has *.NSO Header."
+        elif self.noHeader.isChecked():
+            oldFileHeader = "Doesn't Have *.NSO Header."
+        else:
+            oldFileHeader = "Auto-Decide"
+
+        f = open(".\\resources\\advanced\\oldFile.txt", "w")
+        f.write(oldFileHeader)
+        f.close()
+
+        #Tells findBytes GUI to not show warning message about not saving your settings...
+        self.showDialog = False
+
+        QMessageBox.information(
+                self, "Settings saved!",
+                "Your settings were successfully saved!",
+                QMessageBox.Ok)
+
+        self.close()
+
+    def ques(self):
+        self.window = questionAuto()
+        self.window.show()
+
+class advancedNew(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(advancedNew, self).__init__(*args, **kwargs)
+
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\newFile\\advanced.ui"), self)
+
+        global newFileHeader
+        if newFileHeader == "Auto-Decide":
+            self.automatic.setChecked(True)
+        elif newFileHeader == "Has *.NSO Header.":
+            self.header.setChecked(True)
+        elif newFileHeader == "Doesn't Have *.NSO Header.":
+            self.noHeader.setChecked(True)
+
+        self.question.pressed.connect(self.ques)
+        self.save.pressed.connect(self.saveNew)
+
+        self.ui.setFixedSize(self.ui.size())
+
+        self.show()
+
+    def closeEvent(self, event):
+        #"Holder" variable in case user doesn't save their settings (by pressing "X")...
+        global newFileHeader
+        #Checks if user didn't change their settings...
+        if self.automatic.isChecked() and newFileHeader == "Auto-Decide" or self.header.isChecked() and newFileHeader == "Has *.NSO Header." or self.noHeader.isChecked() and newFileHeader == "Doesn't Have *.NSO Header.":
+            self.showDialog = False
+        else:
+            self.showDialog = True
+
+        if self.showDialog == True:
+            reply = QMessageBox.warning(
+                self, "You forgot to save your settings!",
+                "Would you like to save your settings, before closing this window?",
+                QMessageBox.Save | QMessageBox.Close)
+
+            if reply == QMessageBox.Close:
+                #Telling user their settings were NOT saved...
+                QMessageBox.critical(
+                    self, "Settings NOT saved",
+                    "Your settings were NOT saved.",
+                    QMessageBox.Ok)
+                event.accept()
+            else:
+                #Saving user's settings...
+                self.close()
+                self.saveNew()
+
+        else:
+            event.accept()
+
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
+    def saveNew(self):
+        """Writes user's option into .\\resources\\advanced\\newFile.txt"""
+        global newFileHeader
+        if self.header.isChecked():
+            newFileHeader = "Has *.NSO Header."
+        elif self.noHeader.isChecked():
+            newFileHeader = "Doesn't Have *.NSO Header."
+        else:
+            newFileHeader = "Auto-Decide"
+
+        f = open(".\\resources\\advanced\\newFile.txt", "w")
+        f.write(newFileHeader)
+        f.close()
+
+        #Tells findBytes GUI to not show warning message about not saving your settings...
+        self.showDialog = False
+
+        QMessageBox.information(
+                self, "Settings saved!",
+                "Your settings were successfully saved!",
+                QMessageBox.Ok)
+
+        self.close()
+
+    def ques(self):
+        self.window = questionAuto()
+        self.window.show()
+
+class questionAuto(QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(questionAuto, self).__init__(*args, **kwargs)
+
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\question\\question.ui"), self)
 
         self.show()
 

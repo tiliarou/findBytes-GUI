@@ -49,7 +49,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Please Select Your NEW File (The One That You Want To Port Your Offset To):</string>
+         <string>Please Select Your NEW File (The One That You Want to Port Your Offset To):</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -68,6 +68,9 @@
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::MinimumExpanding</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
@@ -153,10 +156,13 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::MinimumExpanding</enum>
+      </property>
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>40</height>
+        <height>30</height>
        </size>
       </property>
      </spacer>
@@ -166,6 +172,19 @@
       <property name="rightMargin">
        <number>10</number>
       </property>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <spacer name="verticalSpacer_6">
         <property name="orientation">
@@ -180,93 +199,15 @@
        </spacer>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>400</width>
-          <height>131</height>
-         </size>
-        </property>
+       <widget class="QPushButton" name="advanced">
         <property name="font">
          <font>
-          <family>MS Shell Dlg 2</family>
-          <pointsize>10</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
+          <pointsize>14</pointsize>
          </font>
         </property>
-        <property name="title">
-         <string>Your New File...</string>
+        <property name="text">
+         <string>Advanced Options</string>
         </property>
-        <widget class="QRadioButton" name="header">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>60</y>
-           <width>201</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Has *.NSO Header</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="noHeader">
-         <property name="geometry">
-          <rect>
-           <x>260</x>
-           <y>60</y>
-           <width>301</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Doesn't Have *.NSO Header</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="unsure">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>110</y>
-           <width>591</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>(If you are unsure, click &quot;Has *.NSO Header&quot;)</string>
-         </property>
-         <property name="margin">
-          <number>3</number>
-         </property>
-         <property name="indent">
-          <number>0</number>
-         </property>
-        </widget>
        </widget>
       </item>
       <item>
@@ -282,6 +223,19 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
     <item>
@@ -289,9 +243,12 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::MinimumExpanding</enum>
+      </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
+        <width>15</width>
         <height>40</height>
        </size>
       </property>
@@ -356,7 +313,7 @@
         <item>
          <widget class="QPushButton" name="here">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -385,7 +342,7 @@
         <item>
          <widget class="QPushButton" name="Next">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -406,6 +363,22 @@
            <string>Next</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Maximum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
