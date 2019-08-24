@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>917</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,24 @@
           </property>
           <property name="text">
            <string>Type All the Offsets You Wish To Port:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Settings">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Settings...</string>
           </property>
          </widget>
         </item>
@@ -78,14 +96,17 @@
        </layout>
       </item>
       <item row="1" column="0">
-       <widget class="QPushButton" name="Settings">
+       <widget class="QPushButton" name="choose">
         <property name="font">
          <font>
           <pointsize>20</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 85, 0);</string>
+        </property>
         <property name="text">
-         <string>Settings...</string>
+         <string>Choose *.pchtxt file</string>
         </property>
        </widget>
       </item>
@@ -154,7 +175,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>917</width>
      <height>18</height>
     </rect>
    </property>

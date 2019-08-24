@@ -1,4 +1,4 @@
-﻿""" This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
+""" This code was rushed in about 24 hours. Expect bugs, and poor coding; and probably some other 
 stuff too that I can't think of currently ¯\_(ツ)_/¯ . Besides all of that though, I hope you find the tool useful. Cheers """
 
 #MESSAGE FOR AMAZINGCHZ (so I don't forget lol)
@@ -122,12 +122,9 @@ class MainWindow(QMainWindow):
         self.show()
 
         #Declaring variables, to prevent future possible errors, later on.
-        '''global oldFileDir, newFileDir, oldFileHeader, newFileHeader
+        global oldFileDir, newFileDir
         oldFileDir = ""
         newFileDir = ""
-
-        oldFileHeader = ""
-        newFileHeader = ""'''
 
         #Checking if there is new version of findBytes GUI
         self.checkForUpdate()
@@ -340,7 +337,7 @@ class MainWindow(QMainWindow):
 
             else:
                 #Checking which radio button was clicked [old file]
-                f = open(".\\resources\\advanced\\oldFile.txt", "r")
+                f = open(self.resource_path(".\\resources\\advanced\\oldFile.txt"), "r")
                 global oldFileHeader
                 oldFileHeader = str(f.read())
                 f.close()
@@ -415,22 +412,8 @@ class MainWindow(QMainWindow):
             else:
                 #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
                 try:
-                    '''#Checking which radio button is checked [new file]
-                    if self.header.isChecked():
-                        global newFileHeader
-                        newFileHeader = "Has *.NSO Header."
-
-                        self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
-
-                        with open(self.newFileDir, 'rb') as in_file:
-                            with open(self.newRemoveHeader, 'wb') as out_file:
-                                out_file.write(in_file.read()[100:])
-
-                    elif self.noHeader.isChecked():
-                        newFileHeader = "Doesn't Have *.NSO Header."'''
-
                     #Checking which radio button was clicked [new file]
-                    f = open(".\\resources\\advanced\\newFile.txt", "r")
+                    f = open(self.resource_path(".\\resources\\advanced\\newFile.txt"), "r")
                     global newFileHeader
                     newFileHeader = str(f.read())
                     f.close()
@@ -462,6 +445,7 @@ class MainWindow(QMainWindow):
                 self.back.pressed.connect(self.startNewFile)
                 self.Settings.pressed.connect(self.settings)
                 self.howTo.pressed.connect(self.howToMultipleOffsets)
+                self.choose.pressed.connect(self.pchtxt)
                 self.Next.pressed.connect(self.multOffsetsParsing)
 
                 self.show()
@@ -469,19 +453,7 @@ class MainWindow(QMainWindow):
             #Putting in "try" block, since user has option to get new offset from SAME files later on. This would cause an error without this "try".
             try:
                 #Checking which radio button is checked [new file]
-                '''if self.header.isChecked():
-                    newFileHeader = "Has *.NSO Header."
-
-                    self.newRemoveHeader = self.resource_path(".\\resources\\temp\\") + str(self.newFileName)
-
-                    with open(self.newFileDir, 'rb') as in_file:
-                        with open(self.newRemoveHeader, 'wb') as out_file:
-                            out_file.write(in_file.read()[100:])
-
-                elif self.noHeader.isChecked():
-                    newFileHeader = "Doesn't Have *.NSO Header."'''
-                #Checking which radio button was clicked [new file]
-                f = open(".\\resources\\advanced\\newFile.txt", "r")
+                f = open(self.resource_path(".\\resources\\advanced\\newFile.txt"), "r")
                 newFileHeader = str(f.read())
                 f.close()
 
@@ -512,9 +484,165 @@ class MainWindow(QMainWindow):
             self.back.pressed.connect(self.startNewFile)
             self.Settings.pressed.connect(self.settings)
             self.howTo.pressed.connect(self.howToMultipleOffsets)
+            self.choose.pressed.connect(self.pchtxt)
             self.Next.pressed.connect(self.multOffsetsParsing)
 
             self.show()
+
+    def pchtxt(self):
+        """Gets user' *.pchtxt file and ports all patches [OPTIONAL] (IPSwitch)"""
+        # Loading UI...
+        x, y, width, height = self.getGeometry()
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\pchtxt\\pchtxt.ui"), self)
+        self.setGeometry(x, y, width, height)
+
+        self.show()
+
+        self.pchtxtFileDir, self.pchtxtFileExtension = QFileDialog.getOpenFileName(self,"Select PATCH File...", "","Patch File (*.pchtxt)")
+        self.pchtxtFileDir = str(self.pchtxtFileDir)
+        self.pchtxtFileName = QFileInfo(self.pchtxtFileDir).fileName()
+
+        # Making sure user actually selected a *.pchtxt file...
+        if self.pchtxtFileDir in "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQXYZ":
+            self.getMultOffsets()
+            return
+
+        ###
+
+        os.system("python" + " " + self.resource_path("./resources/tools/parserIPS/parserIPS.py") +  " " + self.pchtxtFileDir)
+
+        #Porting offsets via findbytes.py...
+        #Clearing screen (if there is anything on it)...
+        offsets = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\offsets.txt"), "r")
+        os.system("cls")
+        #Calculating how many dashes to fit with the file name...
+        dashes = 96 + len(str(self.pchtxtFileName))
+        print(('-' * dashes) + '\n' + 
+              '| This will take quite some time depending on how many offsets "{0}" contains. Please be patient! |'.format(self.pchtxtFileName) +
+              '\n' + ('-' * dashes) + '\n')
+               
+        counter = 1
+        self.ported = []
+        for line in offsets:
+            newLine = False
+            if line == "\n":
+                self.ported.append("\n")
+            else:
+                try:
+                    #Putting in try, as last offset may not have "\n"...
+                    try:
+                        fixedOffset = line.split("\n")
+                        lineOffset = fixedOffset[0]
+                        newLine = True
+                    except:
+                        lineOffset = str(line)
+                      
+                    #Makes sure line isn't empty (I know this is poorly written, but whatever lol...
+                    if (lineOffset.startswith("0") or lineOffset.startswith("1") or lineOffset.startswith("2")
+                        or lineOffset.startswith("3") or lineOffset.startswith("4") or lineOffset.startswith("5")
+                        or lineOffset.startswith("6") or lineOffset.startswith("7") or lineOffset.startswith("8")
+                        or lineOffset.startswith("9") or lineOffset.startswith("A") or lineOffset.startswith("B")
+                        or lineOffset.startswith("C") or lineOffset.startswith("D") or lineOffset.startswith("E")
+                        or lineOffset.startswith("F") or lineOffset.startswith("a") or lineOffset.startswith("b")
+                        or lineOffset.startswith("c") or lineOffset.startswith("d") or lineOffset.startswith("e")
+                        or lineOffset.startswith("f")):
+
+                        cmd = str("python " + self.resource_path(".\\resources\\tools\\findBytes\\findBytes.py") + " " + str(self.oldRemoveHeader) + " " + str(self.newRemoveHeader) + " " + str(lineOffset))
+                        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+                        finalOutput = p.stdout.read()
+                        retcode = p.wait()
+                        finalOutput = str(finalOutput)
+                        finalOutput = finalOutput[2:len(finalOutput) - 5]
+                        self.ported.append(finalOutput)
+
+                        #Telling user how many are ported...
+                        if counter == 1:
+                            print("1 offset (potentially) ported.")
+                        else:
+                            print("{0} offsets (potentially) ported.".format(counter))
+
+                        counter += 1
+
+                    #Adding new line if needed...
+                    if newLine == True:
+                        self.ported.append("\n")
+                except:
+                   continue
+                                                                                                                        
+        print("\n" + "--------------------------------------------------------------------------" + '\n' + 
+              '| All done! Check findBytes GUI\'s screen to see your new ported offsets! |' +
+              '\n' + "--------------------------------------------------------------------------" + '\n')
+
+        offsets.close()
+
+        x, y, width, height = self.getGeometry()
+        self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\pchtxtAllDone\\pchtxtAllDone.ui"), self)
+        self.setGeometry(x, y, width, height)
+
+        self.options.pressed.connect(self.userOptions)
+
+        # Adding new offsets and new patches to screen
+        # Adding patches...
+        self.patches = []
+        file = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\patches.txt"))
+        # Making sure that the number of items in self.patches == self.ported...
+        for line in file:
+            if line == "\n":
+                self.patches.append("\n")
+            else:
+                try:
+                    altPatch = line.split("\n")
+                    altPatch = altPatch[0]
+
+                    self.patches.append(altPatch)
+                    self.patches.append("\n")
+                except:
+                    self.patches.append(line)
+
+        file.close()
+
+        failed = False
+        for items in range(len(self.ported)):
+            portedOffset = self.ported[items]
+            if len(portedOffset) >= 3:
+                altPortedOffset = portedOffset[0:8]
+
+                if str(portedOffset[0]) == "-":
+                    failed = True
+                    self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]))# + "\n")
+                else:
+                    try:
+                        confidenceLevel = self.ported[items]
+                        confidence = confidenceLevel.find("// Confidence level: ")
+                        confidenceLevel = confidenceLevel[int(confidence):len(confidenceLevel)]
+                
+                        self.userNewPatches.insertPlainText(str(altPortedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel))# + "\n")
+                    except:
+                        continue
+            else:
+                try:
+                    self.userNewPatches.insertPlainText(str(portedOffset))# + " " + str(self.patches[items]))# + " " + str(confidenceLevel) + "\n")
+                except:
+                    continue
+
+        if failed == True:
+            self.choice = QMessageBox()
+            self.choice.setIcon(QMessageBox.Warning)
+            self.choice.setWindowTitle("Failed to port...")
+            self.choice.setText('One or more of your offsets could not be ported. These offsets have been replaced with "*FAILED*".')
+            self.choice.setStandardButtons(QMessageBox.Ok)
+            self.choice.exec_()
+
+        #print("patches: {0}".format(self.patches))
+
+        #print(self.ported)
+
+        '''for items in range(len(self.patches)):
+            print(self.patches[items])'''
+        
+        self.show()
+
+        #self.plainTextEdit.setPlainText(self.pchtxtFileDir)
 
     def multOffsetsParsing(self):
         """Multiple Offsets Parsing"""
