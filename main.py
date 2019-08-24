@@ -601,27 +601,97 @@ class MainWindow(QMainWindow):
 
         file.close()
 
+        #Adding names
+        file = open(".\\resources\\tools\\parserIPS\\resources\\names.txt")
+
+        self.names = []
+        for lines in file:
+            self.names.append(lines)
+            print(lines)
+
+        file.close()
+
+        # Adding ported names, offsets, + patches to screen...
+        nameNum = 0
         failed = False
         for items in range(len(self.ported)):
             portedOffset = self.ported[items]
+
+            #Adding names of patches (when necessary)
+            #Putting in try, as "items + 1" will cause error, on last item in list...
+            try:
+                #Checking if nothing is there
+                if (self.ported[items].startswith("0") or self.ported[items].startswith("1") or self.ported[items].startswith("2")
+                    or self.ported[items].startswith("3") or self.ported[items].startswith("4") or self.ported[items].startswith("5")
+                    or self.ported[items].startswith("6") or self.ported[items].startswith("7") or self.ported[items].startswith("8")
+                    or self.ported[items].startswith("9") or self.ported[items].startswith("A") or self.ported[items].startswith("B")
+                    or self.ported[items].startswith("C") or self.ported[items].startswith("D") or self.ported[items].startswith("E")
+                    or self.ported[items].startswith("F") or self.ported[items].startswith("a") or self.ported[items].startswith("b")
+                    or self.ported[items].startswith("c") or self.ported[items].startswith("d") or self.ported[items].startswith("e")
+                    or self.ported[items].startswith("f") or self.ported[items].startswith("@")):
+
+                    pass
+
+                else:
+                    if (self.ported[items + 1].startswith("0") or self.ported[items + 1].startswith("1") or self.ported[items + 1].startswith("2")
+                        or self.ported[items + 1].startswith("3") or self.ported[items + 1].startswith("4") or self.ported[items + 1].startswith("5")
+                        or self.ported[items + 1].startswith("6") or self.ported[items + 1].startswith("7") or self.ported[items + 1].startswith("8")
+                        or self.ported[items + 1].startswith("9") or self.ported[items + 1].startswith("A") or self.ported[items + 1].startswith("B")
+                        or self.ported[items + 1].startswith("C") or self.ported[items + 1].startswith("D") or self.ported[items + 1].startswith("E")
+                        or self.ported[items + 1].startswith("F") or self.ported[items + 1].startswith("a") or self.ported[items + 1].startswith("b")
+                        or self.ported[items + 1].startswith("c") or self.ported[items + 1].startswith("d") or self.ported[items + 1].startswith("e")
+                        or self.ported[items + 1].startswith("f")) or self.ported[items + 1].startswith("@"):
+
+                        if (self.ported[items - 1].startswith("0") or self.ported[items - 1].startswith("1") or self.ported[items - 1].startswith("2")
+                            or self.ported[items - 1].startswith("3") or self.ported[items - 1].startswith("4") or self.ported[items - 1].startswith("5")
+                            or self.ported[items - 1].startswith("6") or self.ported[items - 1].startswith("7") or self.ported[items - 1].startswith("8")
+                            or self.ported[items - 1].startswith("9") or self.ported[items - 1].startswith("A") or self.ported[items - 1].startswith("B")
+                            or self.ported[items - 1].startswith("C") or self.ported[items - 1].startswith("D") or self.ported[items - 1].startswith("E")
+                            or self.ported[items - 1].startswith("F") or self.ported[items - 1].startswith("a") or self.ported[items - 1].startswith("b")
+                            or self.ported[items - 1].startswith("c") or self.ported[items - 1].startswith("d") or self.ported[items - 1].startswith("e")
+                            or self.ported[items - 1].startswith("f")) or self.ported[items - 1].startswith("@"):
+
+                            pass
+
+                        else:
+
+                            if self.names[nameNum] == "\n":
+                                self.userNewPatches.insertPlainText("\n")
+                            else:
+                                try:
+                                    altName = self.names[nameNum].split("\n")
+                                    altName = altName[0]
+
+                                    self.userNewPatches.insertPlainText(self.names[nameNum])
+                                    self.userNewPatches.insertPlainText("@enabled")
+                                except:
+                                    self.userNewPatches.insertPlainText(self.names[nameNum])
+                                    self.userNewPatches.insertPlainText("@enabled")
+                                    self.userNewPatches.insertPlainText("\n")
+
+                            nameNum += 1
+                        
+            except:
+                continue
+
             if len(portedOffset) >= 3:
                 altPortedOffset = portedOffset[0:8]
 
                 if str(portedOffset[0]) == "-":
                     failed = True
-                    self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]))# + "\n")
+                    self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]))
                 else:
                     try:
                         confidenceLevel = self.ported[items]
                         confidence = confidenceLevel.find("// Confidence level: ")
                         confidenceLevel = confidenceLevel[int(confidence):len(confidenceLevel)]
                 
-                        self.userNewPatches.insertPlainText(str(altPortedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel))# + "\n")
+                        self.userNewPatches.insertPlainText(str(altPortedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel))
                     except:
                         continue
             else:
                 try:
-                    self.userNewPatches.insertPlainText(str(portedOffset))# + " " + str(self.patches[items]))# + " " + str(confidenceLevel) + "\n")
+                    self.userNewPatches.insertPlainText(str(portedOffset))
                 except:
                     continue
 
