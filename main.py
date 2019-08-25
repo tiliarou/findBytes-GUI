@@ -512,7 +512,14 @@ class MainWindow(QMainWindow):
         os.system("python" + " " + self.resource_path("./resources/tools/parserIPS/parserIPS.py") +  " " + self.pchtxtFileDir)
 
         #Porting offsets via findbytes.py...
+        #Getting the number of offsets...
         #Clearing screen (if there is anything on it)...
+        offsets = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\offsets.txt"), "r")
+        number = 0
+        for line in offsets:
+            if line != "\n":
+                number += 1
+        offsets.close()
         offsets = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\offsets.txt"), "r")
         os.system("cls")
         #Calculating how many dashes to fit with the file name...
@@ -523,6 +530,7 @@ class MainWindow(QMainWindow):
                
         counter = 1
         self.ported = []
+
         for line in offsets:
             newLine = False
             if line == "\n":
@@ -557,9 +565,9 @@ class MainWindow(QMainWindow):
 
                         #Telling user how many are ported...
                         if counter == 1:
-                            print("1 offset (potentially) ported.")
+                            print("1/{0} offsets (potentially) ported. - {1}% COMPLETE".format(number, int((counter / number) * 100)))
                         else:
-                            print("{0} offsets (potentially) ported.".format(counter))
+                            print("{0}/{1} offsets (potentially) ported. - {2}% COMPLETE".format(counter, number, int((counter / number) * 100)))
 
                         counter += 1
 
@@ -601,20 +609,34 @@ class MainWindow(QMainWindow):
 
         file.close()
 
-        #Adding names
+        #Adding names...
         file = open(".\\resources\\tools\\parserIPS\\resources\\names.txt")
 
         self.names = []
         for lines in file:
             self.names.append(lines)
-            print(lines)
+
+        file.close()
+
+        #Adding settings (@enabled/@disabled)...
+        file = open(".\\resources\\tools\\parserIPS\\resources\\settings.txt")
+
+        self.patchSettings = []
+        for lines in file:
+            try:
+                line = lines.split("\n")
+                line = line[0]
+                self.patchSettings.append(line)
+            except:
+                self.patchSettings.append(lines)
 
         file.close()
 
         # Adding ported names, offsets, + patches to screen...
-        nameNum = 0
+        num = 0
         failed = False
         for items in range(len(self.ported)):
+            onceFailCheck = False
             portedOffset = self.ported[items]
 
             #Adding names of patches (when necessary)
@@ -629,7 +651,7 @@ class MainWindow(QMainWindow):
                     or self.ported[items].startswith("F") or self.ported[items].startswith("a") or self.ported[items].startswith("b")
                     or self.ported[items].startswith("c") or self.ported[items].startswith("d") or self.ported[items].startswith("e")
                     or self.ported[items].startswith("f") or self.ported[items].startswith("@")):
-
+                        
                     pass
 
                 else:
@@ -640,7 +662,7 @@ class MainWindow(QMainWindow):
                         or self.ported[items + 1].startswith("C") or self.ported[items + 1].startswith("D") or self.ported[items + 1].startswith("E")
                         or self.ported[items + 1].startswith("F") or self.ported[items + 1].startswith("a") or self.ported[items + 1].startswith("b")
                         or self.ported[items + 1].startswith("c") or self.ported[items + 1].startswith("d") or self.ported[items + 1].startswith("e")
-                        or self.ported[items + 1].startswith("f")) or self.ported[items + 1].startswith("@"):
+                        or self.ported[items + 1].startswith("f") or self.ported[items + 1].startswith("@") or self.ported[items + 1].startswith("*FAILED*")):
 
                         if (self.ported[items - 1].startswith("0") or self.ported[items - 1].startswith("1") or self.ported[items - 1].startswith("2")
                             or self.ported[items - 1].startswith("3") or self.ported[items - 1].startswith("4") or self.ported[items - 1].startswith("5")
@@ -649,27 +671,27 @@ class MainWindow(QMainWindow):
                             or self.ported[items - 1].startswith("C") or self.ported[items - 1].startswith("D") or self.ported[items - 1].startswith("E")
                             or self.ported[items - 1].startswith("F") or self.ported[items - 1].startswith("a") or self.ported[items - 1].startswith("b")
                             or self.ported[items - 1].startswith("c") or self.ported[items - 1].startswith("d") or self.ported[items - 1].startswith("e")
-                            or self.ported[items - 1].startswith("f")) or self.ported[items - 1].startswith("@"):
+                            or self.ported[items - 1].startswith("f") or self.ported[items - 1].startswith("@") or self.ported[items - 1].startswith("*FAILED*")):
 
                             pass
 
                         else:
 
-                            if self.names[nameNum] == "\n":
+                            if self.names[num] == "\n":
                                 self.userNewPatches.insertPlainText("\n")
                             else:
                                 try:
-                                    altName = self.names[nameNum].split("\n")
+                                    altName = self.names[num].split("\n")
                                     altName = altName[0]
 
-                                    self.userNewPatches.insertPlainText(self.names[nameNum])
-                                    self.userNewPatches.insertPlainText("@enabled")
+                                    self.userNewPatches.insertPlainText(self.names[num])
+                                    self.userNewPatches.insertPlainText(self.patchSettings[num])
                                 except:
-                                    self.userNewPatches.insertPlainText(self.names[nameNum])
-                                    self.userNewPatches.insertPlainText("@enabled")
+                                    self.userNewPatches.insertPlainText(self.names[num])
+                                    self.userNewPatches.insertPlainText(self.patchSettings[num])
                                     self.userNewPatches.insertPlainText("\n")
 
-                            nameNum += 1
+                            num += 1
                         
             except:
                 continue
@@ -677,18 +699,18 @@ class MainWindow(QMainWindow):
             if len(portedOffset) >= 3:
                 altPortedOffset = portedOffset[0:8]
 
-                if str(portedOffset[0]) == "-":
-                    failed = True
-                    self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]))
-                else:
-                    try:
+                try:
+                    if str(portedOffset[0]) == "-":
+                        failed = True
+                        self.userNewPatches.insertPlainText("*FAILED*" + " " + str(self.patches[items]))
+                    else:
                         confidenceLevel = self.ported[items]
                         confidence = confidenceLevel.find("// Confidence level: ")
                         confidenceLevel = confidenceLevel[int(confidence):len(confidenceLevel)]
                 
                         self.userNewPatches.insertPlainText(str(altPortedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel))
-                    except:
-                        continue
+                except:
+                    continue
             else:
                 try:
                     self.userNewPatches.insertPlainText(str(portedOffset))
@@ -702,17 +724,8 @@ class MainWindow(QMainWindow):
             self.choice.setText('One or more of your offsets could not be ported. These offsets have been replaced with "*FAILED*".')
             self.choice.setStandardButtons(QMessageBox.Ok)
             self.choice.exec_()
-
-        #print("patches: {0}".format(self.patches))
-
-        #print(self.ported)
-
-        '''for items in range(len(self.patches)):
-            print(self.patches[items])'''
         
         self.show()
-
-        #self.plainTextEdit.setPlainText(self.pchtxtFileDir)
 
     def multOffsetsParsing(self):
         """Multiple Offsets Parsing"""
@@ -871,7 +884,7 @@ class MainWindow(QMainWindow):
         #Adding old offsets and patches to screen
         for items in range(len(self.oldOffsets)):
             try:
-                self.userOldPatches.insertPlainText(str(self.oldOffsets[items]) + " " + str(self.patches[items]) + "\n")
+                self.userOldPatches.insertPlainText(str(self.oldOffsets[items]) + str(self.patches[items]) + "\n")
             except:
                 continue
 
@@ -888,7 +901,7 @@ class MainWindow(QMainWindow):
                     confidenceLevel = self.ported[items]
                     confidenceLevel = confidenceLevel[9:len(confidenceLevel)]
                 
-                    self.userNewPatches.insertPlainText(str(portedOffset) + " " + str(self.patches[items]) + " " + str(confidenceLevel) + "\n")
+                    self.userNewPatches.insertPlainText(str(portedOffset) + str(self.patches[items]) + " " + str(confidenceLevel) + "\n")
             except:
                 continue
 

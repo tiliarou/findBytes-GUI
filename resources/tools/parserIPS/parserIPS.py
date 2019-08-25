@@ -43,6 +43,25 @@ def parser():
 
     ###########################################################################
 
+    # Getting names...
+
+    pchtxt = open(file, "r")
+
+    settings = []
+    for lines in pchtxt:
+        pchtxt = open(file, "r")
+            
+        lines = str(lines)
+        try:
+            if lines.startswith("@enabled") or lines.startswith("@disabled"):
+                settings.append(lines)
+        except:
+            pass
+        
+    pchtxt.close()
+    
+    ###########################################################################
+    
     # Getting offsets and patches...
 
     offsets = []
@@ -104,6 +123,13 @@ def parser():
     for items in names:
         n.write(items)
     n.close()
+
+    #---
+
+    s = open(".\\resources\\tools\\parserIPS\\resources\\settings.txt", "w")
+    for items in settings:
+        s.write(items)
+    s.close()
 
     #---
 
