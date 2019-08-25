@@ -43,7 +43,7 @@ def parser():
 
     ###########################################################################
 
-    # Getting names...
+    # Getting settings...
 
     pchtxt = open(file, "r")
 

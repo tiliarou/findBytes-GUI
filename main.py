@@ -636,7 +636,6 @@ class MainWindow(QMainWindow):
         num = 0
         failed = False
         for items in range(len(self.ported)):
-            onceFailCheck = False
             portedOffset = self.ported[items]
 
             #Adding names of patches (when necessary)
@@ -662,7 +661,7 @@ class MainWindow(QMainWindow):
                         or self.ported[items + 1].startswith("C") or self.ported[items + 1].startswith("D") or self.ported[items + 1].startswith("E")
                         or self.ported[items + 1].startswith("F") or self.ported[items + 1].startswith("a") or self.ported[items + 1].startswith("b")
                         or self.ported[items + 1].startswith("c") or self.ported[items + 1].startswith("d") or self.ported[items + 1].startswith("e")
-                        or self.ported[items + 1].startswith("f") or self.ported[items + 1].startswith("@") or self.ported[items + 1].startswith("*FAILED*")):
+                        or self.ported[items + 1].startswith("f") or self.ported[items + 1].startswith("@")):
 
                         if (self.ported[items - 1].startswith("0") or self.ported[items - 1].startswith("1") or self.ported[items - 1].startswith("2")
                             or self.ported[items - 1].startswith("3") or self.ported[items - 1].startswith("4") or self.ported[items - 1].startswith("5")
@@ -671,7 +670,7 @@ class MainWindow(QMainWindow):
                             or self.ported[items - 1].startswith("C") or self.ported[items - 1].startswith("D") or self.ported[items - 1].startswith("E")
                             or self.ported[items - 1].startswith("F") or self.ported[items - 1].startswith("a") or self.ported[items - 1].startswith("b")
                             or self.ported[items - 1].startswith("c") or self.ported[items - 1].startswith("d") or self.ported[items - 1].startswith("e")
-                            or self.ported[items - 1].startswith("f") or self.ported[items - 1].startswith("@") or self.ported[items - 1].startswith("*FAILED*")):
+                            or self.ported[items - 1].startswith("f") or self.ported[items - 1].startswith("@")):
 
                             pass
 
