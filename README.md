@@ -1,6 +1,8 @@
 # findBytes GUI
 *Port your patches, update your offsets - Nintendo Switch*
 
+***For support, join our Discord server:*** <a href="https://discord.gg/mmhgFQk"><img src="https://discordapp.com/api/guilds/427932365457719297/widget.png?style=shield" /></a>
+
 ---
 
 [findBytes](https://gist.github.com/3096/ffd6d257f148aab0b74bfc50dfe43e80) is a tool originally developed by [Dualie](https://github.com/3096), which helps find offsets in different versions of Nintendo Switch games. I then decided to make a nice UI out of it, because who doesn't like UIs?
@@ -40,7 +42,3 @@
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
   - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NSO** files)
-  
----
-
-# *For support, join our Discord server:* <a href="https://discord.gg/mmhgFQk"><img src="https://discordapp.com/api/guilds/427932365457719297/widget.png?style=shield" /></a>
