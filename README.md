@@ -46,4 +46,4 @@
 ---
 
 #### Please note; as stated by [Shadów](https://github.com/shadowninja108):
-> "*findBytes cannot be 100% accurate. If you cannot port an offset with findBytes GUI, the only alternative will* *be to port it manually.*"
+> "*findBytes GUI cannot be 100% accurate. If you cannot port an offset with findBytes GUI, the only alternative will be to port it manually.*"
