@@ -1,5 +1,5 @@
 # findBytes GUI
-**Port your patches, update your offsets - Nintendo Switch**
+*Port your patches, update your offsets - Nintendo Switch*
 
 ---
 
@@ -40,5 +40,7 @@
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
   - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NSO** files)
+  
+---
 
-#### If you encounter any problems, please DM **@AmazingChz#5695** on Discord, or leave an "*Issue*" on GitHub. Thanks!
+# *For support, join our Discord server:* <a href="https://discord.gg/mmhgFQk"><img src="https://discordapp.com/api/guilds/427932365457719297/widget.png?style=shield" /></a>
