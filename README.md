@@ -1,7 +1,7 @@
 # findBytes GUI
-*Port your patches, update your offsets - Nintendo Switch*
-
 ***For support, join our Discord server:*** <a href="https://discord.gg/mmhgFQk"><img src="https://discordapp.com/api/guilds/427932365457719297/widget.png?style=shield" /></a>
+
+*Port your patches, update your offsets - Nintendo Switch*
 
 ---
 
