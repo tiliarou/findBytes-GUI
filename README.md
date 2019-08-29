@@ -42,3 +42,8 @@
   - **AmazingChz:** Programmed the GUI (**findBytes GUI** [[this!](https://github.com/AmazingChz/findBytes-GUI/releases/latest)])
 
   - **SciresM:** Programmed [hactool](https://github.com/SciresM/hactool/releases/latest) (what we use to decompress our ***.NSO** files)
+
+---
+
+#### Please note; as stated by [Shadów](https://github.com/shadowninja108):
+> "*findBytes cannot be 100% accurate. If you cannot port an offset with findBytes GUI, the only alternative will* *be to port it manually.*"
