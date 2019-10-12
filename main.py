@@ -82,15 +82,25 @@ global counter
 counter = 0
 
 #Writing default option for user...
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+    
 global oldFileHeader, newFileHeader
 oldFileHeader = "Auto-Decide"
 newFileHeader = "Auto-Decide"
 
-f = open(".\\resources\\advanced\\oldFile.txt", "w")
+f = open(resource_path(".\\resources\\advanced\\oldFile.txt"), "w")
 f.write(oldFileHeader)
 f.close()
 
-f = open(".\\resources\\advanced\\newFile.txt", "w")
+f = open(resource_path(".\\resources\\advanced\\newFile.txt"), "w")
 f.write(newFileHeader)
 f.close()
 
@@ -1053,7 +1063,7 @@ class advancedOld(QMainWindow):
         else:
             oldFileHeader = "Auto-Decide"
 
-        f = open(".\\resources\\advanced\\oldFile.txt", "w")
+        f = open(self.resource_path(".\\resources\\advanced\\oldFile.txt"), "w")
         f.write(oldFileHeader)
         f.close()
 
@@ -1142,7 +1152,7 @@ class advancedNew(QMainWindow):
         else:
             newFileHeader = "Auto-Decide"
 
-        f = open(".\\resources\\advanced\\newFile.txt", "w")
+        f = open(self.resource_path(".\\resources\\advanced\\newFile.txt"), "w")
         f.write(newFileHeader)
         f.close()
 
