@@ -519,6 +519,9 @@ class MainWindow(QMainWindow):
 
         ###
 
+        #Making sure user has findBytes.py downloaded...
+        self.findBytes("full")
+
         os.system("python" + " " + self.resource_path("./resources/tools/parserIPS/parserIPS.py") +  " " + self.pchtxtFileDir)
 
         #Porting offsets via findbytes.py...
@@ -620,7 +623,7 @@ class MainWindow(QMainWindow):
         file.close()
 
         #Adding names...
-        file = open(".\\resources\\tools\\parserIPS\\resources\\names.txt")
+        file = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\names.txt"))
 
         self.names = []
         for lines in file:
@@ -629,7 +632,7 @@ class MainWindow(QMainWindow):
         file.close()
 
         #Adding settings (@enabled/@disabled)...
-        file = open(".\\resources\\tools\\parserIPS\\resources\\settings.txt")
+        file = open(self.resource_path(".\\resources\\tools\\parserIPS\\resources\\settings.txt"))
 
         self.patchSettings = []
         for lines in file:
