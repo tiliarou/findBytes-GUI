@@ -17,6 +17,15 @@ import sys
 import io
 import time
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def parser():
     
@@ -119,28 +128,28 @@ def parser():
 
     # Writing data to files...
 
-    n = open(".\\resources\\tools\\parserIPS\\resources\\names.txt", "w")
+    n = open(resource_path(".\\resources\\tools\\parserIPS\\resources\\names.txt"), "w")
     for items in names:
         n.write(items)
     n.close()
 
     #---
 
-    s = open(".\\resources\\tools\\parserIPS\\resources\\settings.txt", "w")
+    s = open(resource_path(".\\resources\\tools\\parserIPS\\resources\\settings.txt"), "w")
     for items in settings:
         s.write(items)
     s.close()
 
     #---
 
-    o = open(".\\resources\\tools\\parserIPS\\resources\\offsets.txt", "w")
+    o = open(resource_path(".\\resources\\tools\\parserIPS\\resources\\offsets.txt"), "w")
     for items in offsets:
         o.write(items)
     o.close()
 
     #---
 
-    p = open(".\\resources\\tools\\parserIPS\\resources\\patches.txt", "w")
+    p = open(resource_path(".\\resources\\tools\\parserIPS\\resources\\patches.txt"), "w")
     for items in patches:
         p.write(items)
     p.close()
