@@ -649,7 +649,7 @@ class MainWindow(QMainWindow):
                     or self.ported[items].startswith("C") or self.ported[items].startswith("D") or self.ported[items].startswith("E")
                     or self.ported[items].startswith("F") or self.ported[items].startswith("a") or self.ported[items].startswith("b")
                     or self.ported[items].startswith("c") or self.ported[items].startswith("d") or self.ported[items].startswith("e")
-                    or self.ported[items].startswith("f") or self.ported[items].startswith("@")):
+                    or self.ported[items].startswith("f") or self.ported[items].startswith("@") or self.ported[items].startswith("-")): # <- "-" checks if it failed
                         
                     pass
 
@@ -661,7 +661,7 @@ class MainWindow(QMainWindow):
                         or self.ported[items + 1].startswith("C") or self.ported[items + 1].startswith("D") or self.ported[items + 1].startswith("E")
                         or self.ported[items + 1].startswith("F") or self.ported[items + 1].startswith("a") or self.ported[items + 1].startswith("b")
                         or self.ported[items + 1].startswith("c") or self.ported[items + 1].startswith("d") or self.ported[items + 1].startswith("e")
-                        or self.ported[items + 1].startswith("f") or self.ported[items + 1].startswith("@")):
+                        or self.ported[items + 1].startswith("f") or self.ported[items + 1].startswith("@") or self.ported[items + 1].startswith("-")): # <- "-" checks if it failed
 
                         if (self.ported[items - 1].startswith("0") or self.ported[items - 1].startswith("1") or self.ported[items - 1].startswith("2")
                             or self.ported[items - 1].startswith("3") or self.ported[items - 1].startswith("4") or self.ported[items - 1].startswith("5")
@@ -670,7 +670,7 @@ class MainWindow(QMainWindow):
                             or self.ported[items - 1].startswith("C") or self.ported[items - 1].startswith("D") or self.ported[items - 1].startswith("E")
                             or self.ported[items - 1].startswith("F") or self.ported[items - 1].startswith("a") or self.ported[items - 1].startswith("b")
                             or self.ported[items - 1].startswith("c") or self.ported[items - 1].startswith("d") or self.ported[items - 1].startswith("e")
-                            or self.ported[items - 1].startswith("f") or self.ported[items - 1].startswith("@")):
+                            or self.ported[items - 1].startswith("f") or self.ported[items - 1].startswith("@") or self.ported[items - 1].startswith("-")): # <- "-" checks if it failed
 
                             pass
 
