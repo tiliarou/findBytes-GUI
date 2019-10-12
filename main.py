@@ -158,7 +158,7 @@ class MainWindow(QMainWindow):
                 latest = release.title
 
         #Telling user there is a new release (if there is one)
-        if latest != "Making things easier and faster...always.":
+        if latest != "Port *.pchtxt files! AAAAA!!!":
             self.choice = QMessageBox()
             self.choice.setIcon(QMessageBox.Information)
             self.choice.setWindowTitle("New release is available...")
@@ -1253,7 +1253,7 @@ class multOffsetsHelp(QMainWindow):
         return os.path.join(base_path, relative_path)
 
     def loadTutorial(self):
-        os.system('start "" https://github.com/AmazingChz/findBytes-GUI/blob/6.0/syntax.md')
+        os.system('start "" https://github.com/AmazingChz/findBytes-GUI/blob/7.0/syntax.md')
 
 class fileSettings(QMainWindow):
     def __init__(self, *args, **kwargs):
