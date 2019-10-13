@@ -14,7 +14,7 @@ HOW TO USE:
 """
 
 import sys
-import io
+import os
 import time
 
 def resource_path(relative_path):
