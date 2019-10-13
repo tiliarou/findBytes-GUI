@@ -10,6 +10,7 @@
 ---
 
 # *Features:*
+ - Port all patches from `*.pchtxt` files.
  - Port full [IPS-Witch](https://github.com/3096/ipswitch/releases) patches.
  - Port multiple offsets at a time.
  - Continuously port offsets from *same* or *different* files.
