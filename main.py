@@ -309,6 +309,7 @@ class MainWindow(QMainWindow):
 
     def startOldFile(self):
         """Loads the UI that asks for user's old file (the one they have the offset for)"""
+        os.system("cls")
         x, y, width, height = self.getGeometry()
         self.ui = loadUi(self.resource_path(".\\resources\\interfaces\\oldFile\\oldFile.ui"), self)
         self.setGeometry(x, y, width, height)
@@ -408,6 +409,7 @@ class MainWindow(QMainWindow):
 
     def getMultOffsets(self):
         """Allows user to put as many offsets as they'd like in findBytes GUI"""
+        os.system("cls")
         #We need to use a "try" block, for if the user picks "find new offset from SAME files", the program doesn't crash
         try:
             # Makes sure all info is filled out on-screen
